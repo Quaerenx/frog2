@@ -28,7 +28,7 @@
 			            <path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 2v14h14V5H5zm2 2h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z" fill="#333333" opacity="0.9"/>
 			        </svg>
                 </a>	
-                <span class="logo-text">업무개선</span>
+                <span class="logo-text">ARCHIVE</span>
             </div>
             
             <nav class="main-nav">
@@ -85,12 +85,7 @@
                         </ul>
                     </li>
                     
-                    <!-- 마이페이지 -->
-                    <li>
-                        <a href="http://192.168.40.70:8080" class="${pageTitle eq 'OLLAMA' ? 'active' : ''}">
-                            <i class="fas fa-user mr-1"></i>OLLAMA
-                        </a>
-                    </li> 
+                    
                     
                     <!-- 로그아웃 -->
                     <li>

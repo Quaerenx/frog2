@@ -52,176 +52,41 @@
     }
     
     /* 담당자별 섹션 */
-    .inspector-section {
-        margin-bottom: 2rem;
-    }
-    
-    .inspector-header {
-        background: var(--primary);
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 12px 12px 0 0;
-        margin-bottom: 0;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-size: 1.2rem;
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(61, 90, 128, 0.3);
-    }
-    
-    .inspector-header i {
-        font-size: 1.4rem;
-    }
-    
-    .customer-count {
-        background: rgba(255, 255, 255, 0.2);
-        padding: 0.25rem 0.75rem;
-        border-radius: 12px;
-        font-size: 0.9rem;
-        margin-left: auto;
-    }
+    .inspector-block { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
+    .inspector-section { display: flex; gap: 1rem; align-items: flex-start; }
+    .inspector-header { min-width: 180px; border-left: 3px solid var(--primary); padding-left: 0.75rem; color: #374151; font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; background: transparent; box-shadow: none; border-radius: 0; }
+    .inspector-header i { color: var(--primary); font-size: 1rem; }
+    /* customer-count 제거 */
     
     /* 카드 그리드 */
-    .customer-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.5rem;
-        padding: 1.5rem;
-        background: #f8fafc;
-        border-radius: 0 0 12px 12px;
-        border: 1px solid #e5e7eb;
-        border-top: none;
-    }
+    .customer-grid { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; padding: 0; background: transparent; border: none; }
     
     /* 고객사 카드 */
-    .customer-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        border: 1px solid #e5e7eb;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
+    .customer-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 0.875rem; margin: 0; transition: background-color 0.2s, border-color 0.2s; cursor: pointer; position: relative; overflow: hidden; }
     
-    .customer-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #3b82f6, #10b981);
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-    }
+    .customer-card::before { display: none; }
+    .customer-card:hover { background: #f8fafc; border-color: #e1e7ef; }
     
-    .customer-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-        border-color: #3b82f6;
-    }
+    .customer-name { font-size: 0.95rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .customer-name i { color: var(--primary); font-size: 0.95rem; }
     
-    .customer-card:hover::before {
-        transform: scaleX(1);
-    }
+    .customer-info { display: grid; gap: 0.375rem; font-size: 0.85rem; color: #6b7280; }
     
-    .customer-name {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #1f2937;
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
-    .customer-name i {
-        color: #3b82f6;
-        font-size: 1rem;
-    }
-    
-    .customer-info {
-        display: grid;
-        gap: 0.5rem;
-        font-size: 0.875rem;
-        color: #6b7280;
-    }
-    
-    .info-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.25rem 0;
-    }
+    .info-row { display: flex; justify-content: space-between; align-items: center; }
     
     .info-label {
         font-weight: 500;
         color: #374151;
     }
     
-    .info-value {
-        color: #6b7280;
-        text-align: right;
-        max-width: 150px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+    .info-value { color: #6b7280; text-align: right; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     
-    .version-badge {
-        background: #f0f9ff;
-        color: #0369a1;
-        padding: 0.125rem 0.5rem;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        font-weight: 500;
-    }
+    .version-badge { background: #eef6ff; color: #1e40af; padding: 0.125rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 500; }
+    .mode-badge { background: #f5fdf7; color: #166534; padding: 0.125rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 500; }
     
-    .mode-badge {
-        background: #f0fdf4;
-        color: #166534;
-        padding: 0.125rem 0.5rem;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        font-weight: 500;
-    }
-    
-    .card-footer {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid #f3f4f6;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .view-history-btn {
-        background: var(--primary);
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-        border: none;
-        cursor: pointer;
-    }
-    
-    .view-history-btn:hover {
-        background: #2f4968;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(61, 90, 128, 0.25);
-        color: white;
-        text-decoration: none;
-    }
+    /*.card-footer { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #f3f4f6; display: flex; justify-content: flex-end; }*/
+    .view-history-btn { background: transparent; color: var(--primary); padding: 0; border: none; font-size: 0.85rem; }
+    .view-history-btn:hover { text-decoration: underline; }
     
     .empty-state {
         text-align: center;
@@ -326,68 +191,114 @@
     <!-- 담당자별 고객사 카드 목록 -->
     <c:choose>
         <c:when test="${not empty inspectorCustomers}">
+            <!-- 접속 사용자와 동일한 점검자 섹션을 우선 배치 -->
             <c:forEach var="entry" items="${inspectorCustomers}">
-                <div class="inspector-section">
-                    <div class="inspector-header">
-                        <i class="fas fa-user-tie"></i>
-                        <span>${entry.key}</span>
-                        <span class="customer-count">${entry.value.size()}개 고객사</span>
+                <c:if test="${entry.key == user.userName}">
+                    <div class="inspector-block">
+                    <div class="inspector-section">
+                        <div class="inspector-header">
+                            <i class="fas fa-user-tie"></i>
+                            <span>${entry.key}</span>
+                        </div>
+                        
+                        <div class="customer-grid">
+                            <c:forEach var="customer" items="${entry.value}">
+                                <div class="customer-card" 
+                                     onclick="location.href='${pageContext.request.contextPath}/maintenance?view=history&customerName=${customer.customerName}'">
+                                    
+                                    <div class="customer-name">
+                                        <i class="fas fa-building"></i>
+                                        ${customer.customerName}
+                                    </div>
+                                    
+                                    <div class="customer-info">
+                                        <div class="info-row">
+                                            <span class="info-label">DB명</span>
+                                            <span class="info-value" title="${customer.dbName}">${customer.dbName}</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">버전</span>
+                                            <span class="info-value">
+                                                <c:if test="${not empty customer.verticaVersion}">
+                                                    <span class="version-badge">${customer.verticaVersion}</span>
+                                                </c:if>
+                                            </span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">모드</span>
+                                            <span class="info-value">
+                                                <c:if test="${not empty customer.mode}">
+                                                    <span class="mode-badge">${customer.mode}</span>
+                                                </c:if>
+                                            </span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">노드수</span>
+                                            <span class="info-value">${customer.nodes}</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </c:forEach>
+                        </div>
                     </div>
-                    
-                    <div class="customer-grid">
-                        <c:forEach var="customer" items="${entry.value}">
-                            <div class="customer-card" 
-                                 onclick="location.href='${pageContext.request.contextPath}/maintenance?view=history&customerName=${customer.customerName}'">
-                                
-                                <div class="customer-name">
-                                    <i class="fas fa-building"></i>
-                                    ${customer.customerName}
-                                </div>
-                                
-                                <div class="customer-info">
-                                    <div class="info-row">
-                                        <span class="info-label">도입년도</span>
-                                        <span class="info-value">${customer.firstIntroductionYear}</span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">DB명</span>
-                                        <span class="info-value" title="${customer.dbName}">${customer.dbName}</span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">버전</span>
-                                        <span class="info-value">
-                                            <c:if test="${not empty customer.verticaVersion}">
-                                                <span class="version-badge">${customer.verticaVersion}</span>
-                                            </c:if>
-                                        </span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">모드</span>
-                                        <span class="info-value">
-                                            <c:if test="${not empty customer.mode}">
-                                                <span class="mode-badge">${customer.mode}</span>
-                                            </c:if>
-                                        </span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">노드수</span>
-                                        <span class="info-value">${customer.nodes}</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="card-footer">
-                                    <div class="text-muted" style="font-size: 0.75rem;">
-                                        클릭하여 점검 이력 보기
-                                    </div>
-                                    <div class="view-history-btn">
-                                        <i class="fas fa-history"></i>
-                                        이력 보기
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
                     </div>
-                </div>
+                </c:if>
+            </c:forEach>
+
+            <!-- 나머지 점검자 섹션들 -->
+            <c:forEach var="entry" items="${inspectorCustomers}">
+                <c:if test="${entry.key != user.userName}">
+                    <div class="inspector-block">
+                    <div class="inspector-section">
+                        <div class="inspector-header">
+                            <i class="fas fa-user-tie"></i>
+                            <span>${entry.key}</span>
+                        </div>
+                        
+                        <div class="customer-grid">
+                            <c:forEach var="customer" items="${entry.value}">
+                                <div class="customer-card" 
+                                     onclick="location.href='${pageContext.request.contextPath}/maintenance?view=history&customerName=${customer.customerName}'">
+                                    
+                                    <div class="customer-name">
+                                        <i class="fas fa-building"></i>
+                                        ${customer.customerName}
+                                    </div>
+                                    
+                                    <div class="customer-info">
+                                        <div class="info-row">
+                                            <span class="info-label">DB명</span>
+                                            <span class="info-value" title="${customer.dbName}">${customer.dbName}</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">버전</span>
+                                            <span class="info-value">
+                                                <c:if test="${not empty customer.verticaVersion}">
+                                                    <span class="version-badge">${customer.verticaVersion}</span>
+                                                </c:if>
+                                            </span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">모드</span>
+                                            <span class="info-value">
+                                                <c:if test="${not empty customer.mode}">
+                                                    <span class="mode-badge">${customer.mode}</span>
+                                                </c:if>
+                                            </span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">노드수</span>
+                                            <span class="info-value">${customer.nodes}</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+                    </div>
+                </c:if>
             </c:forEach>
         </c:when>
         <c:otherwise>

@@ -68,19 +68,23 @@ body.dash-centered.page-1050 .page-wrapper { max-width: 1050px; }
 
 /* 카드들을 중앙 정렬로 배치 */
 .card-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 28px;
-  justify-content: center;
+  justify-items: stretch;
+  align-items: stretch;
 }
 
 .card-item {
-  flex: 0 1 360px;
-  max-width: 380px;
+  width: 100%;
+  max-width: none;
 }
 
+@media (max-width: 1024px) {
+  .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 768px) {
-  .card-item { flex-basis: 100%; max-width: 100%; }
+  .card-grid { grid-template-columns: 1fr; }
 }
 
 /* 아이콘으로 인한 들쭉날쭉 정렬 문제 보정 */

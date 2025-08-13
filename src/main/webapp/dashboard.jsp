@@ -55,6 +55,17 @@
             </div>
           </div>
         </c:forEach>
+          <!-- 추가 카드: 임의 이미지 표시 -->
+          <div class="card-item">
+            <div class="card dashboard-card">
+              <div class="card-header">
+                <i class="fas fa-image"></i> 임시
+              </div>
+              <div class="card-body text-center">
+                <img src="${pageContext.request.contextPath}/resources/images/images/ollama.png" alt="sample" style="max-width:100%; height:auto; border-radius:6px;" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
