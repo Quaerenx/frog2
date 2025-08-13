@@ -36,10 +36,74 @@
         font-size: 1rem;
     }
     
-    .header-actions {
+    /* 액션 바: 제목과 구분되는 별도 행 */
+    .action-bar {
         display: flex;
-        gap: 1rem;
-        align-items: center;
+        gap: 0.75rem;
+        justify-content: flex-end;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #e5e7eb;
+    }
+    /* 액션 버튼 고정 크기/톤 통일 */
+    .action-bar .btn {
+        padding: 0.625rem 1rem;
+        font-size: 0.875rem;
+        border-radius: 6px;
+        min-width: 120px;
+        justify-content: center;
+    }
+    .action-bar .btn i {
+        font-size: 0.875rem;
+    }
+    /* 상세 섹션 하단 액션 영역 */
+    .section-actions {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid #e5e7eb;
+    }
+    .section-actions .btn {
+        padding: 0.625rem 1rem;
+        font-size: 0.875rem;
+        border-radius: 6px;
+        min-width: 120px;
+        justify-content: center;
+    }
+    /* 더 미니멀한 텍스트형 버튼 */
+    .section-actions .btn-ghost {
+        background: transparent;
+        border: none;
+        color: #374151;
+        padding: 0.25rem 0.5rem;
+        min-width: auto;
+        border-radius: 0;
+    }
+    .section-actions .btn-ghost:hover {
+        color: var(--primary);
+        text-decoration: underline;
+        background: transparent;
+    }
+    .section-actions .btn-ghost-danger {
+        color: #b91c1c;
+    }
+    .section-actions .btn-ghost-danger:hover {
+        color: #991b1b;
+        text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+        .section-actions { flex-direction: column; align-items: stretch; }
+        .section-actions .btn { width: 100%; }
+    }
+    @media (max-width: 768px) {
+        .action-bar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.5rem;
+        }
+        .action-bar .btn { width: 100%; }
     }
     
     .btn {
@@ -57,41 +121,38 @@
     }
     
     .btn-primary {
-        background: #4f46e5;
+        background: var(--primary);
         color: white;
+        border: 1px solid var(--primary);
     }
     
     .btn-primary:hover {
-        background: #4338ca;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        background: #2f4968;
         color: white;
         text-decoration: none;
     }
     
     .btn-secondary {
-        background: #6b7280;
-        color: white;
+        background: transparent;
+        color: #374151;
+        border: 1px solid #d1d5db;
     }
     
     .btn-secondary:hover {
-        background: #4b5563;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.25);
-        color: white;
+        background: #f3f4f6;
+        color: #1f2937;
         text-decoration: none;
     }
     
     .btn-danger {
-        background: #dc2626;
-        color: white;
+        background: transparent;
+        color: #b91c1c;
+        border: 1px solid #ef4444;
     }
     
     .btn-danger:hover {
-        background: #b91c1c;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
-        color: white;
+        background: #fef2f2;
+        color: #991b1b;
         text-decoration: none;
     }
     
@@ -269,20 +330,12 @@
                 <h1><i class="fas fa-tools"></i> ${troubleshooting.title}</h1>
                 <p class="lead">트러블 슈팅 상세정보</p>
             </div>
-            <div class="header-actions">
-                <a href="${pageContext.request.contextPath}/troubleshooting?view=list" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i>
-                    목록으로
-                </a>
-                <a href="${pageContext.request.contextPath}/troubleshooting?view=edit&id=${troubleshooting.id}" class="btn btn-primary">
-                    <i class="fas fa-edit"></i>
-                    수정하기
-                </a>
-                <button class="btn btn-danger" onclick="deleteTroubleshooting(${troubleshooting.id})">
-                    <i class="fas fa-trash"></i>
-                    삭제하기
-                </button>
-            </div>
+        </div>
+        <div class="action-bar">
+            <a href="${pageContext.request.contextPath}/troubleshooting?view=list" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                목록으로
+            </a>
         </div>
     </div>
     
@@ -466,6 +519,10 @@
                     최종 수정: <fmt:formatDate value="${troubleshooting.updatedDate}" pattern="yyyy-MM-dd HH:mm" />
                 </div>
             </c:if>
+            <div class="section-actions">
+                <a href="${pageContext.request.contextPath}/troubleshooting?view=edit&id=${troubleshooting.id}" class="btn btn-ghost">수정하기</a>
+                <button class="btn btn-ghost btn-ghost-danger" onclick="deleteTroubleshooting('${troubleshooting.id}')">삭제하기</button>
+            </div>
         </div>
     </div>
 </div>

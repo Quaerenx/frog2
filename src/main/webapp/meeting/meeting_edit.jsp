@@ -3,15 +3,21 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="pageTitle" value="회의록 수정" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-customers" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/meeting.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
 
-<div class="meeting-page-container">
-    <div class="page-header">
-        <h2><i class="fas fa-edit"></i> 회의록 수정</h2>
-        <p>회의 내용을 수정해주세요.</p>
-    </div>
+<div class="meeting-page-container customer-management">
+    <t:pageHeader>
+        <jsp:attribute name="title"><i class="fas fa-edit"></i> 회의록 수정</jsp:attribute>
+        <jsp:attribute name="subtitle">회의 내용을 수정해주세요.</jsp:attribute>
+        <jsp:attribute name="actions">
+            <a href="${pageContext.request.contextPath}/meeting?view=view&id=${meeting.meetingId}" class="add-button" style="background:#6b7280"><i class="fas fa-file-alt"></i> 상세보기</a>
+        </jsp:attribute>
+    </t:pageHeader>
     
     <!-- 오류 메시지 -->
     <c:if test="${not empty error}">
@@ -102,7 +108,7 @@
             <!-- 버튼 -->
             <div class="button-group">
                 <a href="${pageContext.request.contextPath}/meeting?view=view&id=${meeting.meetingId}" class="btn btn-cancel">취소</a>
-                <button type="button" class="btn btn-preview" onclick="previewContent()">미리보기</button>
+                <button type="button" class="btn btn-secondary" onclick="previewContent()">미리보기</button>
                 <button type="submit" class="btn btn-primary">수정하기</button>
                 <button type="button" class="btn btn-danger" onclick="confirmDelete()">삭제하기</button>
             </div>

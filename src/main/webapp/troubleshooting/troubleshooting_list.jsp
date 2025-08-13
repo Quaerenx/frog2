@@ -39,7 +39,7 @@
     }
     
     .add-button {
-        background: #4f46e5;
+        background: var(--primary);
         color: white;
         padding: 0.75rem 1.5rem;
         border-radius: 8px;
@@ -54,9 +54,9 @@
     }
     
     .add-button:hover {
-        background: #4338ca;
+        background: #2f4968;
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        box-shadow: 0 4px 12px rgba(61, 90, 128, 0.25);
         color: white;
         text-decoration: none;
     }
@@ -124,8 +124,8 @@
     }
     
     .troubleshooting-table tbody tr:hover {
-        background-color: #f0f9ff;
-        box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+        background-color: #f5f7fb;
+        box-shadow: 0 2px 8px rgba(61, 90, 128, 0.10);
     }
     
     .troubleshooting-table td {
@@ -140,13 +140,13 @@
     }
     
     .title-link {
-        color: #4f46e5;
+        color: #1f2937;
         text-decoration: none;
         font-weight: 500;
     }
     
     .title-link:hover {
-        color: #4338ca;
+        color: var(--primary);
         text-decoration: underline;
     }
     

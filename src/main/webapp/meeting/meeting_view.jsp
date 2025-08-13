@@ -3,11 +3,28 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="pageTitle" value="${meeting.title}" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-customers" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/meeting.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
 
-<div class="meeting-view">
+<div class="meeting-view customer-management">
+    <t:pageHeader>
+        <jsp:attribute name="title"><i class="fas fa-file-alt"></i> ${meeting.title}</jsp:attribute>
+        <jsp:attribute name="subtitle">
+            <span class="meta-item"><i class="fas fa-tag"></i> <span class="type-badge type-${meeting.meetingType.toLowerCase()}">${meeting.meetingType}</span></span>
+            <span class="meta-item"><i class="fas fa-calendar"></i> <fmt:formatDate value="${meeting.meetingDatetime}" pattern="yyyy년 MM월 dd일 HH:mm"/></span>
+            <span class="meta-item"><i class="fas fa-user"></i> ${meeting.authorName}</span>
+        </jsp:attribute>
+        <jsp:attribute name="actions">
+            <c:if test="${meeting.authorId == user.userId}">
+                <a href="${pageContext.request.contextPath}/meeting?view=edit&id=${meeting.meetingId}" class="add-button"><i class="fas fa-edit"></i> 수정하기</a>
+            </c:if>
+            <a href="${pageContext.request.contextPath}/meeting?view=list" class="add-button" style="background:#6b7280"><i class="fas fa-list"></i> 목록</a>
+        </jsp:attribute>
+    </t:pageHeader>
     <!-- 뒤로 가기 -->
     <div class="back-navigation">
         <a href="${pageContext.request.contextPath}/meeting?view=list" class="back-link">

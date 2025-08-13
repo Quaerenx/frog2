@@ -2,15 +2,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="pageTitle" value="회의록 작성" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-customers" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/meeting.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
 
-<div class="meeting-page-container">
-    <div class="page-header">
-        <h2><i class="fas fa-pen"></i> 새 회의록 작성</h2>
-        <p>회의 내용을 정리하여 등록해주세요.</p>
-    </div>
+<div class="meeting-page-container customer-management">
+    <t:pageHeader>
+        <jsp:attribute name="title"><i class="fas fa-pen"></i> 새 회의록 작성</jsp:attribute>
+        <jsp:attribute name="subtitle">회의 내용을 정리하여 등록해주세요.</jsp:attribute>
+        <jsp:attribute name="actions">
+            <a href="${pageContext.request.contextPath}/meeting?view=list" class="add-button" style="background:#6b7280"><i class="fas fa-list"></i> 목록으로</a>
+        </jsp:attribute>
+    </t:pageHeader>
     
     <!-- 오류 메시지 -->
     <c:if test="${not empty error}">
@@ -71,7 +77,7 @@
             <!-- 버튼 -->
             <div class="button-group">
                 <a href="${pageContext.request.contextPath}/meeting?view=list" class="btn btn-cancel">취소</a>
-                <button type="button" class="btn btn-preview" onclick="previewContent()">미리보기</button>
+                <button type="button" class="btn btn-secondary" onclick="previewContent()">미리보기</button>
                 <button type="submit" class="btn btn-primary">등록하기</button>
             </div>
         </form>

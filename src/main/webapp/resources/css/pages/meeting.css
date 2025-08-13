@@ -1148,17 +1148,18 @@
     padding: 20px;
 }
 
-.page-header {
+/* meeting_write 전용 page-header 범위를 제한하여 공용 page-header에 영향 주지 않게 함 */
+.meeting-page-container > .page-header {
     margin-bottom: 30px;
     text-align: center;
 }
 
-.page-header h2 {
+.meeting-page-container > .page-header h2 {
     color: #333;
     margin-bottom: 10px;
 }
 
-.page-header p {
+.meeting-page-container > .page-header p {
     color: #666;
     margin: 0;
 }

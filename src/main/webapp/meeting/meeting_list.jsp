@@ -3,25 +3,23 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="pageTitle" value="회의록 관리" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-customers" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/meeting.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
 
-<div class="meeting-management">
-    <div class="page-header">
-        <div class="meeting-header-actions">
-            <div>
-                <h1><i class="fas fa-clipboard-list"></i> 회의록 관리</h1>
-                <p class="lead">총 ${totalCount}개의 회의록이 등록되어 있습니다</p>
-            </div>
-            <div>
-                <a href="${pageContext.request.contextPath}/meeting?view=write" class="write-button">
-                    <i class="fas fa-pen"></i>
-                    새 회의록 작성
-                </a>
-            </div>
-        </div>
-    </div>
+<div class="meeting-management customer-management">
+    <t:pageHeader>
+        <jsp:attribute name="title">
+        	<i class="fas fa-clipboard-list"></i> 회의록 관리
+        </jsp:attribute>
+        <jsp:attribute name="subtitle">총 ${totalCount}개의 회의록이 등록되어 있습니다</jsp:attribute>
+        <jsp:attribute name="actions">
+            <a href="${pageContext.request.contextPath}/meeting?view=write" class="add-button"><i class="fas fa-pen"></i> 새 회의록 작성</a>
+        </jsp:attribute>
+    </t:pageHeader>
     
     <!-- 성공/에러 메시지 표시 -->
     <c:if test="${not empty sessionScope.message}">
@@ -41,10 +39,10 @@
     </c:if>
     
     <!-- 회의록 목록 -->
-    <div class="meeting-container">
+    <div class="meeting-container table-container">
         <c:choose>
             <c:when test="${not empty meetingList}">
-                <table class="meeting-table">
+                <table class="meeting-table customer-table">
                     <thead>
                         <tr>
                             <th class="col-title">제목</th>
