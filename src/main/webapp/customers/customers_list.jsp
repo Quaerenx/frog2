@@ -166,13 +166,14 @@
                                 <i class="fas fa-sort sort-icon ${sortField == 'manager_name' ? 'active' : ''}"></i>
                             </a>
                         </th>
-                        <th>작업</th>
+                        
                     </tr>
                 </thead>
                 <tbody id="customer-table-body">
                     <c:forEach var="customer" items="${customerList}">
                         <tr class="customer-row" 
-                            data-search-text="${customer.customerName} ${customer.verticaVersion} ${customer.mode} ${customer.os} ${customer.nodes} ${customer.licenseSize} ${customer.said} ${customer.managerName}">
+                            data-search-text="${customer.customerName} ${customer.verticaVersion} ${customer.mode} ${customer.os} ${customer.nodes} ${customer.licenseSize} ${customer.said} ${customer.managerName}"
+                            onclick="viewDetail('${customer.customerName}')" style="cursor:pointer;">
                             <td title="${customer.customerName}" data-original="${not empty customer.customerName ? customer.customerName : ''}">${not empty customer.customerName ? customer.customerName : ''}</td>
                             <td data-original="${not empty customer.verticaVersion ? customer.verticaVersion : ''}">${not empty customer.verticaVersion ? customer.verticaVersion : ''}</td>
                             <td data-original="${not empty customer.mode ? customer.mode : ''}">${not empty customer.mode ? customer.mode : ''}</td>
@@ -181,27 +182,12 @@
                             <td data-original="${not empty customer.licenseSize ? customer.licenseSize : ''}">${not empty customer.licenseSize ? customer.licenseSize : ''}</td>
                             <td data-original="${not empty customer.said ? customer.said : ''}">${not empty customer.said ? customer.said : ''}</td>
                             <td title="${customer.managerName}" data-original="${not empty customer.managerName ? customer.managerName : ''}">${not empty customer.managerName ? customer.managerName : ''}</td>
-							<td>
-							    <div class="action-buttons">
-							        <a href="javascript:void(0)" onclick="viewDetail('${customer.customerName}')" 
-							           class="action-btn detail-btn" title="상세정보 보기">
-							            <i class="fas fa-info-circle"></i>
-							        </a>
-							        <a href="javascript:void(0)" onclick="editCustomer('${customer.customerName}')" 
-							           class="action-btn edit-btn" title="정보 수정">
-							            <i class="fas fa-edit"></i>
-							        </a>
-							        <button class="action-btn delete-btn" onclick="deleteCustomer('${customer.customerName}')" title="고객사 삭제">
-							            <i class="fas fa-trash"></i>
-							        </button>
-							    </div>
-							</td>
                         </tr>
                     </c:forEach>
                     
                     <c:if test="${empty customerList}">
                         <tr id="empty-state">
-                            <td colspan="9" class="empty-state">
+                            <td colspan="8" class="empty-state">
                                 <i class="fas fa-inbox"></i>
                                 <div>
                                     <c:choose>
@@ -343,37 +329,7 @@
         window.location.href = '${pageContext.request.contextPath}/customers?view=detail&customerName=' + encodedName;
     }
     
-    // 고객사 수정 페이지로 이동
-    function editCustomer(customerName) {
-        var encodedName = encodeURIComponent(customerName);
-        window.location.href = '${pageContext.request.contextPath}/customers?view=edit&name=' + encodedName;
-    }
-    
-    // 고객사 삭제 함수
-    function deleteCustomer(customerName) {
-        if (confirm('정말로 "' + customerName + '" 고객사를 삭제하시겠습니까?\n\n삭제된 데이터는 복구할 수 없습니다.')) {
-            // 삭제 폼 생성 및 전송 (POST 방식이므로 인코딩 불필요)
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '${pageContext.request.contextPath}/customers';
-            
-            var actionInput = document.createElement('input');
-            actionInput.type = 'hidden';
-            actionInput.name = 'action';
-            actionInput.value = 'delete';
-            
-            var nameInput = document.createElement('input');
-            nameInput.type = 'hidden';
-            nameInput.name = 'customer_name';
-            nameInput.value = customerName; // POST 방식이므로 인코딩하지 않음
-            
-            form.appendChild(actionInput);
-            form.appendChild(nameInput);
-            
-            document.body.appendChild(form);
-            form.submit();
-        }
-    }
+    // (편집/삭제 기능은 상세 페이지로 이동) 
 </script>
 
 </body>

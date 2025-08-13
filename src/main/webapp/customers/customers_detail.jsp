@@ -10,6 +10,8 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
 
+<c:set var="currentCustomerName" value="${not empty customerDetail.customerName ? customerDetail.customerName : (not empty customer.customerName ? customer.customerName : '')}" />
+
 <div class="customer-detail customer-management">
     <t:pageHeader>
         <jsp:attribute name="title">
@@ -31,12 +33,19 @@
             고객사 정보 및 시스템 세부사항
         </jsp:attribute>
         <jsp:attribute name="actions">
-            <a href="${pageContext.request.contextPath}/customers?view=list" class="add-button" style="background:#6b7280">
-                <i class="fas fa-arrow-left"></i> 목록으로
-            </a>
-            <a href="${pageContext.request.contextPath}/customers?view=editDetail&customerName=<c:choose><c:when test='${not empty customerDetail.customerName}'>${customerDetail.customerName}</c:when><c:otherwise>${customer.customerName}</c:otherwise></c:choose>" class="add-button">
-                <i class="fas fa-edit"></i> 수정하기
-            </a>
+            <div class="d-flex" style="flex-direction:column; gap:8px;">
+                <a href="${pageContext.request.contextPath}/customers?view=list" class="add-button" style="background:#6b7280">
+                    <i class="fas fa-arrow-left"></i> 목록으로
+                </a>
+                <div class="d-flex" style="gap:8px;">
+                    <a href="javascript:void(0)" onclick="editCustomer('${currentCustomerName}')" class="add-button">
+                        <i class="fas fa-edit"></i> 정보수정
+                    </a>
+                    <a href="javascript:void(0)" onclick="deleteCustomer('${currentCustomerName}')" class="add-button" style="background:#ef4444">
+                        <i class="fas fa-trash"></i> 고객사 삭제
+                    </a>
+                </div>
+            </div>
         </jsp:attribute>
     </t:pageHeader>
     
@@ -368,5 +377,35 @@
         </div>
     </c:if>
 </div>
+
+<script>
+function editCustomer(customerName) {
+	var encodedName = encodeURIComponent(customerName);
+	window.location.href = '${pageContext.request.contextPath}/customers?view=edit&name=' + encodedName;
+}
+
+function deleteCustomer(customerName) {
+	if (confirm('정말로 "' + customerName + '" 고객사를 삭제하시겠습니까?\n\n삭제된 데이터는 복구할 수 없습니다.')) {
+		var form = document.createElement('form');
+		form.method = 'POST';
+		form.action = '${pageContext.request.contextPath}/customers';
+
+		var actionInput = document.createElement('input');
+		actionInput.type = 'hidden';
+		actionInput.name = 'action';
+		actionInput.value = 'delete';
+
+		var nameInput = document.createElement('input');
+		nameInput.type = 'hidden';
+		nameInput.name = 'customer_name';
+		nameInput.value = customerName;
+
+		form.appendChild(actionInput);
+		form.appendChild(nameInput);
+		document.body.appendChild(form);
+		form.submit();
+	}
+}
+</script>
 
 <%@ include file="/includes/footer.jsp" %>

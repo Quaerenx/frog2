@@ -439,6 +439,7 @@
 .customer-table thead th .sort-icon.active { color: #666 !important; }
 .customer-table tbody tr:nth-child(even) td { background: #fbfcfe !important; }
 .customer-table tbody tr:hover td { background: #f5f7fb !important; }
+.customer-table tbody tr { transition: background-color 0.12s ease; }
 /* 숫자 중심 컬럼 정렬: 노드수(5), 라이선스(6) */
 .customer-table tbody td:nth-child(5),
 .customer-table tbody td:nth-child(6) { text-align: right !important; font-variant-numeric: tabular-nums; }
@@ -564,14 +565,7 @@
 /* 아이콘 크기 고정 */
 .action-btn i { font-size: 16px; line-height: 1; }
 
-/* 작업 컬럼 너비/오버플로우 보정 */
-.customer-table th:last-child,
-.customer-table td:last-child {
-    width: 132px !important;
-    min-width: 132px !important;
-    text-align: center !important;
-    overflow: visible !important;
-}
+/* (작업 컬럼 제거됨) 마지막 컬럼 고정 스타일 삭제 */
 
 .action-btn.primary {
     color: var(--primary);
