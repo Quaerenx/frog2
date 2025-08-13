@@ -855,7 +855,9 @@
 
 /* 버튼 그룹 */
 .customer-edit-page .form-container .button-group {
-    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 1rem !important;
     margin-top: 30px !important;
     padding-top: 20px !important;
     border-top: 1px solid #eee !important;
@@ -875,12 +877,12 @@
 }
 
 .customer-edit-page .form-container .btn-primary {
-    background: #007bff !important;
+    background: var(--primary) !important;
     color: white !important;
 }
 
 .customer-edit-page .form-container .btn-primary:hover {
-    background: #0056b3 !important;
+    background: #2f4968 !important;
 }
 
 .customer-edit-page .form-container .btn-secondary {
@@ -953,6 +955,11 @@
     margin: 0 auto;
     padding: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 고객 상세 편집 페이지가 customer-management와 함께 쓰일 때 패딩/여백을 목록 페이지와 일치 */
+.customer-detail.customer-management {
+    padding: var(--space-32) var(--space-16);
 }
 
 .header-actions {
@@ -1277,7 +1284,9 @@ textarea.form-control {
 
 /* 버튼 그룹 */
 .customer-add-page .form-container .button-group {
-    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 1rem !important;
     margin-top: 30px !important;
     padding-top: 20px !important;
     border-top: 1px solid #eee !important;
@@ -1297,12 +1306,12 @@ textarea.form-control {
 }
 
 .customer-add-page .form-container .btn-primary {
-    background: #007bff !important;
+    background: var(--primary) !important;
     color: white !important;
 }
 
 .customer-add-page .form-container .btn-primary:hover {
-    background: #0056b3 !important;
+    background: #2f4968 !important;
 }
 
 .customer-add-page .form-container .btn-cancel {

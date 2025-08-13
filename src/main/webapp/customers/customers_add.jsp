@@ -2,15 +2,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="pageTitle" value="새 고객사 추가" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-customers" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
 <!-- 전체를 customer-add-page 클래스로 감싸기 -->
-<div class="customer-add-page">
-    <div class="container">
-        <div class="page-header">
-            <h2><i class="fas fa-plus-circle"></i> 새 고객사 등록</h2>
-            <p>새로운 고객사의 기본 정보를 입력해주세요.</p>
-        </div>
+<div class="customer-add-page customer-management">
+        <t:pageHeader>
+            <jsp:attribute name="title">
+                <i class="fas fa-plus-circle"></i> 새 고객사 등록
+            </jsp:attribute>
+            <jsp:attribute name="subtitle">
+                새로운 고객사의 기본 정보를 입력해주세요.
+            </jsp:attribute>
+            <jsp:attribute name="actions">
+                <a href="${pageContext.request.contextPath}/customers?view=list" class="add-button">
+                    <i class="fas fa-list"></i> 목록으로
+                </a>
+            </jsp:attribute>
+        </t:pageHeader>
         
         <!-- 오류 메시지 -->
         <c:if test="${not empty error}">
@@ -169,7 +179,6 @@
                 </div>
             </form>
         </div>
-    </div>
 </div>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">

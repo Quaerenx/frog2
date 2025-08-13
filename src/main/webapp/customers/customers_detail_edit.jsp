@@ -3,32 +3,33 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="pageTitle" value="고객사 상세정보 수정" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-customers" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
 
-<div class="customer-detail">
-    <div class="page-header">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h1><i class="fas fa-edit"></i> 
-                    <c:choose>
-                        <c:when test="${not empty customerDetail.customerName}">
-                            ${customerDetail.customerName}
-                        </c:when>
-                        <c:when test="${not empty customer.customerName}">
-                            ${customer.customerName}
-                        </c:when>
-                        <c:otherwise>
-                            고객사
-                        </c:otherwise>
-                    </c:choose>
-                    상세정보 수정
-                </h1>
-                <p class="lead">고객사 상세정보를 수정하세요</p>
-            </div>
-        </div>
-    </div>
+<div class="customer-detail customer-management">
+    <t:pageHeader>
+        <jsp:attribute name="title">
+            <i class="fas fa-edit"></i>
+            <c:choose>
+                <c:when test="${not empty customerDetail.customerName}">${customerDetail.customerName}</c:when>
+                <c:when test="${not empty customer.customerName}">${customer.customerName}</c:when>
+                <c:otherwise>고객사</c:otherwise>
+            </c:choose>
+            상세정보 수정
+        </jsp:attribute>
+        <jsp:attribute name="subtitle">고객사 상세정보를 수정하세요</jsp:attribute>
+        <jsp:attribute name="actions">
+            <a href="${pageContext.request.contextPath}/customers?view=detail&customerName=<c:choose><c:when test='${not empty customerDetail.customerName}'>${customerDetail.customerName}</c:when><c:otherwise>${customer.customerName}</c:otherwise></c:choose>" class="add-button" style="background:#6b7280">
+                <i class="fas fa-info-circle"></i> 상세보기
+            </a>
+            <a href="${pageContext.request.contextPath}/customers?view=list" class="add-button">
+                <i class="fas fa-list"></i> 목록으로
+            </a>
+        </jsp:attribute>
+    </t:pageHeader>
     
     <!-- 성공/에러 메시지 표시 -->
     <c:if test="${not empty sessionScope.message}">

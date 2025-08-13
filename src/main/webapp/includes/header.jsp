@@ -18,7 +18,7 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 </head>
-<body>
+<body class="${pageBodyClass}">
     <header class="main-header">
         <div class="header-box">
         <div class="container">

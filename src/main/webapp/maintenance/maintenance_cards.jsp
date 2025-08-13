@@ -2,8 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="pageTitle" value="정기점검 이력관리" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-maintenance" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
 <style>
 	.maintenance-management {
 	    width: 100%;
@@ -13,16 +16,7 @@
 	    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	}
     
-    .page-header {
-        background: #ffffff;
-        color: #2c3e50;
-        padding: 2rem;
-        border-radius: 12px;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e8ecef;
-        text-align: center;
-    }
+    /* page-header 스타일은 customers.css 공용 규칙 사용 */
     
     .page-header h1 {
         margin: 0 0 0.5rem 0;
@@ -63,7 +57,7 @@
     }
     
     .inspector-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--primary);
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 12px 12px 0 0;
@@ -73,7 +67,7 @@
         gap: 0.75rem;
         font-size: 1.2rem;
         font-weight: 600;
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 2px 8px rgba(61, 90, 128, 0.3);
     }
     
     .inspector-header i {
@@ -206,7 +200,7 @@
     }
     
     .view-history-btn {
-        background: linear-gradient(135deg, #10b981, #059669);
+        background: var(--primary);
         color: white;
         padding: 0.5rem 1rem;
         border-radius: 6px;
@@ -222,9 +216,9 @@
     }
     
     .view-history-btn:hover {
-        background: linear-gradient(135deg, #059669, #047857);
+        background: #2f4968;
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        box-shadow: 0 4px 12px rgba(61, 90, 128, 0.25);
         color: white;
         text-decoration: none;
     }
@@ -304,10 +298,13 @@
 </style>
 
 <div class="maintenance-management">
-    <div class="page-header">
-        <h1><i class="fas fa-clipboard-check"></i> 정기점검 이력관리</h1>
-        <p class="lead">담당자별 고객사를 선택하여 정기점검 이력을 관리하세요</p>
-    </div>
+    <t:pageHeader>
+        <jsp:attribute name="title"><i class="fas fa-clipboard-check"></i> 정기점검 이력관리</jsp:attribute>
+        <jsp:attribute name="subtitle">담당자별 고객사를 선택하여 정기점검 이력을 관리하세요</jsp:attribute>
+        <jsp:attribute name="actions">
+            <a href="${pageContext.request.contextPath}/maintenance?view=add" class="add-button"><i class="fas fa-plus"></i> 이력 추가</a>
+        </jsp:attribute>
+    </t:pageHeader>
 	    
 	<!-- 성공/에러 메시지 표시 -->
 	<c:if test="${not empty sessionScope.message}">

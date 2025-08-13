@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <c:set var="pageTitle" value="고객사 정보" scope="request" />
 
@@ -16,35 +17,33 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/dashboard_box.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-<body class="page-1050">
+<body class="page-1050 page-customers">
 <%@ include file="/includes/header.jsp" %>
 
 <div class="customer-management">
-    <div class="page-header">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h1><i class="fas fa-building"></i> 고객사 정보</h1>
-                <p class="lead">
-                    <c:choose>
-                        <c:when test="${filter == 'maintenance'}">
-                            정기점검 고객사: <strong>${currentCount}</strong>개 
-                            <span class="text-muted">(전체: ${totalCount}개)</span>
-                        </c:when>
-                        <c:otherwise>
-                            전체 고객사: <strong>${currentCount}</strong>개 
-                            <span class="text-muted">(정기점검: ${maintenanceCount}개)</span>
-                        </c:otherwise>
-                    </c:choose>
-                </p>
-            </div>
-            <div>
-                <a href="${pageContext.request.contextPath}/customers?view=add" class="add-button">
-                    <i class="fas fa-plus"></i>
-                    새 고객사 추가
-                </a>
-            </div>
-        </div>
-    </div>
+    <t:pageHeader>
+        <jsp:attribute name="title">
+            <i class="fas fa-building"></i> 고객사 정보
+        </jsp:attribute>
+        <jsp:attribute name="subtitle">
+            <c:choose>
+                <c:when test="${filter == 'maintenance'}">
+                    정기점검 고객사: <strong>${currentCount}</strong>개 
+                    <span class="text-muted">(전체: ${totalCount}개)</span>
+                </c:when>
+                <c:otherwise>
+                    전체 고객사: <strong>${currentCount}</strong>개 
+                    <span class="text-muted">(정기점검: ${maintenanceCount}개)</span>
+                </c:otherwise>
+            </c:choose>
+        </jsp:attribute>
+        <jsp:attribute name="actions">
+            <a href="${pageContext.request.contextPath}/customers?view=add" class="add-button">
+                <i class="fas fa-plus"></i>
+                새 고객사 추가
+            </a>
+        </jsp:attribute>
+    </t:pageHeader>
 	    
 	<!-- 성공/에러 메시지 표시 -->
 	<c:if test="${not empty sessionScope.message}">

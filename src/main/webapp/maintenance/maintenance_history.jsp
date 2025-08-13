@@ -3,8 +3,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="pageTitle" value="정기점검 이력 - ${customerName}" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-maintenance" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
 <style>
 .maintenance-history {
         width: 100%;
@@ -144,7 +147,7 @@
     }
     
     .history-header {
-        background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        background: #f8fafc;
         padding: 1.5rem;
         border-bottom: 1px solid #e5e7eb;
         display: flex;
@@ -162,8 +165,8 @@
     }
     
     .record-count {
-        background: #dbeafe;
-        color: #1e40af;
+        background: var(--primary-light);
+        color: var(--primary);
         padding: 0.25rem 0.75rem;
         border-radius: 12px;
         font-size: 0.875rem;
@@ -412,47 +415,21 @@
 </style>
 
 <div class="maintenance-history">
-    <div class="page-header">
-        <div class="header-content">
-            <div class="customer-info">
-                <div class="customer-name">
-                    <i class="fas fa-building"></i>
-                    ${customerName}
-                </div>
-                <c:if test="${not empty customer}">
-                    <div class="customer-details">
-                        <div class="detail-item">
-                            <i class="fas fa-calendar"></i>
-                            <span>도입년도: ${customer.firstIntroductionYear}</span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-database"></i>
-                            <span>DB: ${customer.dbName}</span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-code-branch"></i>
-                            <span>버전: ${customer.verticaVersion}</span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-user"></i>
-                            <span>담당자: ${customer.managerName}</span>
-                        </div>
-                    </div>
-                </c:if>
-            </div>
-            
-            <div class="action-buttons">
-                <a href="${pageContext.request.contextPath}/maintenance?view=add&customerName=${customerName}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    새 점검 이력 추가
-                </a>
-                <a href="${pageContext.request.contextPath}/maintenance?view=cards" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i>
-                    목록으로 돌아가기
-                </a>
-            </div>
-        </div>
-    </div>
+    <t:pageHeader>
+        <jsp:attribute name="title"><i class="fas fa-building"></i> ${customerName}</jsp:attribute>
+        <jsp:attribute name="subtitle">
+            <c:if test="${not empty customer}">
+                <span class="detail-item"><i class="fas fa-calendar"></i> 도입년도: ${customer.firstIntroductionYear}</span>
+                <span class="detail-item"><i class="fas fa-database"></i> DB: ${customer.dbName}</span>
+                <span class="detail-item"><i class="fas fa-code-branch"></i> 버전: ${customer.verticaVersion}</span>
+                <span class="detail-item"><i class="fas fa-user"></i> 담당자: ${customer.managerName}</span>
+            </c:if>
+        </jsp:attribute>
+        <jsp:attribute name="actions">
+            <a href="${pageContext.request.contextPath}/maintenance?view=add&customerName=${customerName}" class="add-button"><i class="fas fa-plus"></i> 새 점검 이력 추가</a>
+            <a href="${pageContext.request.contextPath}/maintenance?view=cards" class="add-button" style="background:#6b7280"><i class="fas fa-arrow-left"></i> 목록으로</a>
+        </jsp:attribute>
+    </t:pageHeader>
     
     <!-- 성공/에러 메시지 표시 -->
     <c:if test="${not empty sessionScope.message}">

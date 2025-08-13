@@ -3,13 +3,20 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="pageTitle" value="정기점검 이력 수정" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-maintenance" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
+
 <div class="container">
-    <div class="page-header">
-        <h2><i class="fas fa-edit"></i> 정기점검 이력 수정</h2>
-        <p>정기점검 이력 정보를 수정해주세요.</p>
-    </div>
+    <t:pageHeader>
+        <jsp:attribute name="title"><i class="fas fa-edit"></i> 정기점검 이력 수정</jsp:attribute>
+        <jsp:attribute name="subtitle">정기점검 이력 정보를 수정해주세요.</jsp:attribute>
+        <jsp:attribute name="actions">
+            <a href="${pageContext.request.contextPath}/maintenance?view=history&customerName=${record.customerName}" class="add-button" style="background:#6b7280"><i class="fas fa-history"></i> 이력으로</a>
+        </jsp:attribute>
+    </t:pageHeader>
     
     <!-- 오류 메시지 -->
     <c:if test="${not empty error}">

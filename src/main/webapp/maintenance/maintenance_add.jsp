@@ -2,17 +2,31 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="pageTitle" value="정기점검 이력 추가" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-maintenance" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
 
 <!-- 전체를 maintenance-add-page 클래스로 감싸기 -->
 <div class="maintenance-add-page">
     <div class="container">
-        <div class="page-header">
-            <h2><i class="fas fa-plus-circle"></i> 새 정기점검 이력 등록</h2>
-            <c:if test="${not empty customerName}">
-                <p><strong>${customerName}</strong>의 정기점검 이력을 입력해주세요.</p>
-            </c:if>
-        </div>
+        <t:pageHeader>
+            <jsp:attribute name="title"><i class="fas fa-plus-circle"></i> 새 정기점검 이력 등록</jsp:attribute>
+            <jsp:attribute name="subtitle">
+                <c:if test="${not empty customerName}"><strong>${customerName}</strong>의 정기점검 이력을 입력해주세요.</c:if>
+            </jsp:attribute>
+            <jsp:attribute name="actions">
+                <c:choose>
+                    <c:when test="${not empty customerName}">
+                        <a href="${pageContext.request.contextPath}/maintenance?view=history&customerName=${customerName}" class="add-button" style="background:#6b7280"><i class="fas fa-history"></i> 이력으로</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/maintenance?view=cards" class="add-button" style="background:#6b7280"><i class="fas fa-list"></i> 카드로</a>
+                    </c:otherwise>
+                </c:choose>
+            </jsp:attribute>
+        </t:pageHeader>
         
         <!-- 오류 메시지 -->
         <c:if test="${not empty error}">

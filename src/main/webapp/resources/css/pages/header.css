@@ -28,7 +28,20 @@
 }
 
 .page-1050 .main-header .header-box,
-.page-1050 .main-header .container { max-width: 968px; }
+.page-1050 .main-header .container { max-width: 1000px; }
+
+/* 고객사 페이지 전용 헤더 폭 (요청에 따라 968px로 고정) */
+.page-customers .main-header .header-box,
+.page-customers .main-header .container { max-width: 968px; }
+
+/* 유지보수 페이지도 고객사와 동일하게 968px 적용 */
+.page-maintenance .main-header .header-box,
+.page-maintenance .main-header .container { max-width: 968px; }
+
+/* 대시보드 페이지도 968px로 통일 */
+.page-dashboard .main-header .header-box,
+.page-dashboard .main-header .container { max-width: 968px; }
+.page-dashboard .main-footer .container { max-width: 968px; }
 
 /* 드롭다운 메뉴 스타일 - 수정된 버전 */
 .main-nav ul li.dropdown {

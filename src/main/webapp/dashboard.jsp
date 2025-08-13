@@ -3,6 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="pageTitle" value="대시보드" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-customers" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -15,17 +17,23 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/components.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/utilities.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/dashboard.css">
+  <!-- 고객사 페이지 공통 톤(헤더/버튼)을 재사용 -->
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/dashboard_box.css">
 </head>
-<body class="page-1050">
+<body class="page-1050 page-customers">
   <%@ include file="/includes/header.jsp" %>
 
-    <div class="page-body">
-      <div class="dashboard-management">
-        <div class="greeting-bar">
-          <div class="greeting-text">안녕하세요, ${user.userName}님</div>
-        </div>
+    <div class="customer-management">
+        <t:pageHeader>
+          <jsp:attribute name="title"><i class="fas fa-th-large"></i> 대시보드</jsp:attribute>
+          <jsp:attribute name="subtitle">업무 바로가기와 핵심 메뉴를 한눈에 확인하세요</jsp:attribute>
+          <jsp:attribute name="actions">
+            <a href="${pageContext.request.contextPath}/customers?view=list" class="add-button"><i class="fas fa-building"></i> 고객사 정보</a>
+            <a href="${pageContext.request.contextPath}/maintenance?view=cards" class="add-button" style="background:#6b7280"><i class="fas fa-clipboard-check"></i> 정기점검</a>
+          </jsp:attribute>
+        </t:pageHeader>
         <div class="card-grid">
         <c:forEach var="entry" items="${dashboardMenus}">
           <div class="card-item">

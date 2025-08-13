@@ -3,43 +3,42 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="pageTitle" value="고객사 상세정보" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-customers" scope="request" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
 
-<div class="customer-detail">
-    <div class="page-header">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h1><i class="fas fa-building"></i> 
-                    <c:choose>
-                        <c:when test="${not empty customerDetail.customerName}">
-                            ${customerDetail.customerName}
-                        </c:when>
-                        <c:when test="${not empty customer.customerName}">
-                            ${customer.customerName}
-                        </c:when>
-                        <c:otherwise>
-                            고객사
-                        </c:otherwise>
-                    </c:choose>
-                    상세정보
-                </h1>
-                <p class="lead">고객사 정보 및 시스템 세부사항</p>
-            </div>
-            <div class="header-actions">
-                <a href="${pageContext.request.contextPath}/customers?view=list" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i>
-                    목록으로
-                </a>
-                <a href="${pageContext.request.contextPath}/customers?view=editDetail&customerName=<c:choose><c:when test='${not empty customerDetail.customerName}'>${customerDetail.customerName}</c:when><c:otherwise>${customer.customerName}</c:otherwise></c:choose>" class="btn btn-primary">
-                    <i class="fas fa-edit"></i>
-                    수정하기
-                </a>
-            </div>
-        </div>
-    </div>
+<div class="customer-detail customer-management">
+    <t:pageHeader>
+        <jsp:attribute name="title">
+            <i class="fas fa-building"></i>
+            <c:choose>
+                <c:when test="${not empty customerDetail.customerName}">
+                    ${customerDetail.customerName}
+                </c:when>
+                <c:when test="${not empty customer.customerName}">
+                    ${customer.customerName}
+                </c:when>
+                <c:otherwise>
+                    고객사
+                </c:otherwise>
+            </c:choose>
+            상세정보
+        </jsp:attribute>
+        <jsp:attribute name="subtitle">
+            고객사 정보 및 시스템 세부사항
+        </jsp:attribute>
+        <jsp:attribute name="actions">
+            <a href="${pageContext.request.contextPath}/customers?view=list" class="add-button" style="background:#6b7280">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </a>
+            <a href="${pageContext.request.contextPath}/customers?view=editDetail&customerName=<c:choose><c:when test='${not empty customerDetail.customerName}'>${customerDetail.customerName}</c:when><c:otherwise>${customer.customerName}</c:otherwise></c:choose>" class="add-button">
+                <i class="fas fa-edit"></i> 수정하기
+            </a>
+        </jsp:attribute>
+    </t:pageHeader>
     
     <!-- 성공/에러 메시지 표시 -->
     <c:if test="${not empty sessionScope.message}">
