@@ -879,94 +879,36 @@
 }
 
 /* 회의록 목록 테이블 */
-.meeting-container {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e5e7eb;
-    overflow: hidden;
-}
+/* 고객/정기점검 테이블과 톤 맞춤: 공용 table-container 사용 */
+.meeting-container { all: unset; }
 
-.meeting-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
+/* 공용 .customer-table 사용으로 삭제 */
+.meeting-table { all: unset; }
 
-.meeting-table thead {
-    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-}
+/* 공용 thead 스타일 사용 */
+.meeting-table thead { all: unset; }
 
-.meeting-table th {
-    color: #374151;
-    font-weight: 600;
-    padding: 1rem 0.75rem;
-    text-align: center;
-    border-bottom: 2px solid #e5e7eb;
-    white-space: nowrap;
-}
+/* 공용 th 사용 */
+.meeting-table th { all: unset; }
 
-.meeting-table tbody tr {
-    transition: all 0.2s ease;
-    border-bottom: 1px solid #f3f4f6;
-}
+/* 공용 tbody hover/스트라이프 사용 */
+.meeting-table tbody tr,
+.meeting-table tbody tr:nth-child(even),
+.meeting-table tbody tr:hover { all: unset; }
 
-.meeting-table tbody tr:nth-child(even) {
-    background-color: #fafbfc;
-}
-
-.meeting-table tbody tr:hover {
-    background-color: #f0f9ff;
-    transform: scale(1.01);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
-}
-
-.meeting-table td {
-    padding: 1rem 0.75rem;
-    border-right: 1px solid #f3f4f6;
-    vertical-align: middle;
-    color: #374151;
-}
-
-.meeting-table td:last-child {
-    border-right: none;
-}
+/* 공용 td 사용 */
+.meeting-table td,
+.meeting-table td:last-child { all: unset; }
 
 /* 컬럼별 스타일 */
-.col-title {
-    width: 35%;
-    text-align: left;
-}
-
-.col-type {
-    width: 10%;
-    text-align: center;
-}
-
-.col-datetime {
-    width: 15%;
-    text-align: center;
-}
-
-.col-author {
-    width: 10%;
-    text-align: center;
-}
-
-.col-stats {
-    width: 10%;
-    text-align: center;
-}
-
-.col-date {
-    width: 12%;
-    text-align: center;
-}
-
-.col-actions {
-    width: 8%;
-    text-align: center;
-}
+/* 개별 폭 제한 제거: 공용 테이블 자동폭 사용 */
+.col-title,
+.col-type,
+.col-datetime,
+.col-author,
+.col-stats,
+.col-date,
+.col-actions { all: unset; }
 
 /* 제목 링크 */
 .title-link {
@@ -988,7 +930,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: #6b7280;
 }
 
@@ -999,10 +941,7 @@
 }
 
 .comment-count {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: #059669;
+    display: inline-block;
 }
 
 /* 액션 버튼 */

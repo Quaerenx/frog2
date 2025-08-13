@@ -42,54 +42,37 @@
     <div class="meeting-container table-container">
         <c:choose>
             <c:when test="${not empty meetingList}">
-                <table class="meeting-table customer-table">
+                <table class="customer-table">
                     <thead>
                         <tr>
-                            <th class="col-title">제목</th>
-                            <th class="col-type">회의 유형</th>
-                            <th class="col-datetime">회의 일시</th>
-                            <th class="col-author">작성자</th>
-                            <th class="col-stats">조회/댓글</th>
-                            <th class="col-date">등록일</th>
-                            <th class="col-actions">관리</th>
+                            <th>제목</th>
+                            <th>회의 일시</th>
+                            <th>작성자</th>
+                            <th>조회/댓글</th>
+                            <th>등록일</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach var="meeting" items="${meetingList}">
-                            <tr>
-                                <td class="col-title">
+                            <tr style="cursor:pointer;" onclick="location.href='${pageContext.request.contextPath}/meeting?view=view&id=${meeting.meetingId}'">
+                                <td>
                                     <a href="${pageContext.request.contextPath}/meeting?view=view&id=${meeting.meetingId}" 
                                        class="title-link" title="${meeting.title}">
                                         ${meeting.title}
                                     </a>
                                 </td>
-                                <td class="col-type">
-                                    <span class="type-badge type-${meeting.meetingType.toLowerCase()}">${meeting.meetingType}</span>
-                                </td>
-                                <td class="col-datetime">
+                                <td>
                                     <fmt:formatDate value="${meeting.meetingDatetime}" pattern="MM/dd HH:mm"/>
                                 </td>
-                                <td class="col-author">${meeting.authorName}</td>
-                                <td class="col-stats">
+                                <td class="text-center">${meeting.authorName}</td>
+                                <td>
                                     <div class="stats-info">
-                                        <span class="view-count">
-                                            <i class="fas fa-eye"></i> ${meeting.viewCount}
-                                        </span>
-                                        <span class="comment-count">
-                                            <i class="fas fa-comment"></i> ${meeting.commentCount}
-                                        </span>
+                                        <span class="view-count">조회 ${meeting.viewCount}</span>
+                                        <span class="comment-count">댓글 ${meeting.commentCount}</span>
                                     </div>
                                 </td>
-                                <td class="col-date">
+                                <td>
                                     <fmt:formatDate value="${meeting.createdAt}" pattern="MM/dd"/>
-                                </td>
-                                <td class="col-actions">
-                                    <c:if test="${meeting.authorId == user.userId}">
-                                        <a href="${pageContext.request.contextPath}/meeting?view=edit&id=${meeting.meetingId}" 
-                                           class="action-button" title="수정">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </c:if>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -152,7 +135,7 @@
                     <i class="fas fa-clipboard"></i>
                     <h3>등록된 회의록이 없습니다</h3>
                     <p>첫 번째 회의록을 작성해보세요.</p>
-                    <a href="${pageContext.request.contextPath}/meeting?view=write" class="write-button">
+                    <a href="${pageContext.request.contextPath}/meeting?view=write" class="add-button">
                         <i class="fas fa-pen"></i>
                         회의록 작성하기
                     </a>
