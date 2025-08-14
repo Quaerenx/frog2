@@ -9,6 +9,17 @@
 
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
+<style>
+	/* 고객 상세 - 미니멀 버튼 스타일 */
+	.customer-detail .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+	.customer-detail .btn-min { padding: 6px 12px; border-radius: 6px; font-size: 14px; line-height: 1.2; border: 1px solid #e5e7eb; background: #ffffff; color: #374151; text-decoration: none; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 6px; }
+	.customer-detail .btn-min:hover { background: #f3f4f6; color: #111827; }
+	.customer-detail .btn-min.primary { border-color: transparent; background: var(--primary); color: #ffffff; }
+	.customer-detail .btn-min.primary:hover { background: #2f4968; }
+	.customer-detail .btn-min.danger { border-color: transparent; background: #ef4444; color: #ffffff; }
+	.customer-detail .btn-min.danger:hover { background: #dc2626; }
+	.customer-detail .btn-min i { font-size: 14px; }
+</style>
 
 <c:set var="currentCustomerName" value="${not empty customerDetail.customerName ? customerDetail.customerName : (not empty customer.customerName ? customer.customerName : '')}" />
 
@@ -32,21 +43,13 @@
         <jsp:attribute name="subtitle">
             고객사 정보 및 시스템 세부사항
         </jsp:attribute>
-        <jsp:attribute name="actions">
-            <div class="d-flex" style="flex-direction:column; gap:8px;">
-                <a href="${pageContext.request.contextPath}/customers?view=list" class="add-button" style="background:#6b7280">
-                    <i class="fas fa-arrow-left"></i> 목록으로
-                </a>
-                <div class="d-flex" style="gap:8px;">
-                    <a href="javascript:void(0)" onclick="editCustomer('${currentCustomerName}')" class="add-button">
-                        <i class="fas fa-edit"></i> 정보수정
-                    </a>
-                    <a href="javascript:void(0)" onclick="deleteCustomer('${currentCustomerName}')" class="add-button" style="background:#ef4444">
-                        <i class="fas fa-trash"></i> 고객사 삭제
-                    </a>
-                </div>
-            </div>
-        </jsp:attribute>
+		<jsp:attribute name="actions">
+			<div class="header-actions">
+				<a href="${pageContext.request.contextPath}/customers?view=list" class="btn-min">
+					<i class="fas fa-arrow-left"></i> 목록으로
+				</a>
+			</div>
+		</jsp:attribute>
     </t:pageHeader>
     
     <!-- 성공/에러 메시지 표시 -->
@@ -55,6 +58,7 @@
             <i class="fas fa-check-circle"></i>
             ${sessionScope.message}
         </div>
+
         <c:remove var="message" scope="session" />
     </c:if>
     
@@ -63,6 +67,8 @@
             <i class="fas fa-exclamation-circle"></i>
             ${sessionScope.error}
         </div>
+        <!-- detail-container 아래 전역 액션 버튼 -->
+        <!-- 이동: 모든 케이스 공통 영역으로 아래로 이동 -->
         <c:remove var="error" scope="session" />
     </c:if>
     
@@ -376,6 +382,16 @@
             </div>
         </div>
     </c:if>
+<!-- detail-container 외부 공통 액션 영역: 언제나 표시 -->
+<div class="detail-actions" style="display:flex; justify-content:flex-end; gap:8px; margin:12px 0 0 0;">
+    <a href="javascript:void(0)" onclick="editCustomer('${currentCustomerName}')" class="btn-min primary">
+        <i class="fas fa-edit"></i> 정보수정
+    </a>
+    <a href="javascript:void(0)" onclick="deleteCustomer('${currentCustomerName}')" class="btn-min danger">
+        <i class="fas fa-trash"></i> 고객사 삭제
+    </a>
+    
+</div>
 </div>
 
 <script>

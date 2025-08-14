@@ -72,11 +72,9 @@
         width: 16px;
     }
     
-    .action-buttons {
-        display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-    }
+    .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-min { padding: 6px 12px; border-radius: 6px; font-size: 14px; line-height: 1.2; border: 1px solid #e5e7eb; background: #ffffff; color: #374151; text-decoration: none; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-min:hover { background: #f3f4f6; color: #111827; }
     
     .btn {
         padding: 0.75rem 1.5rem;
@@ -426,8 +424,8 @@
             </c:if>
         </jsp:attribute>
         <jsp:attribute name="actions">
-            <a href="${pageContext.request.contextPath}/maintenance?view=add&customerName=${customerName}" class="add-button"><i class="fas fa-plus"></i> 새 점검 이력 추가</a>
-            <a href="${pageContext.request.contextPath}/maintenance?view=cards" class="add-button" style="background:#6b7280"><i class="fas fa-arrow-left"></i> 목록으로</a>
+            <a href="${pageContext.request.contextPath}/maintenance?view=add&customerName=${customerName}" class="btn-min"><i class="fas fa-plus"></i> 새 점검 이력 추가</a>
+            <a href="${pageContext.request.contextPath}/maintenance?view=cards" class="btn-min"><i class="fas fa-arrow-left"></i> 목록으로</a>
         </jsp:attribute>
     </t:pageHeader>
     
@@ -464,7 +462,7 @@
             <c:choose>
                 <c:when test="${not empty records}">
                     <c:forEach var="record" items="${records}">
-                        <div class="history-item">
+                        <div class="history-item" onclick="location.href='${pageContext.request.contextPath}/maintenance?view=edit&id=${record.maintenanceId}'" style="cursor:pointer;">
                             <div class="history-meta">
                                 <div class="inspection-date">
                                     <i class="fas fa-calendar-check"></i>
@@ -502,21 +500,7 @@
                                 </div>
                             </c:if>
                             
-                            <div class="history-actions">
-                                <a href="${pageContext.request.contextPath}/maintenance?view=edit&id=${record.maintenanceId}" 
-                                   class="btn-edit">
-                                    <i class="fas fa-edit"></i> 수정
-                                </a>
-                                <form method="post" class="d-inline" 
-                                      onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="maintenance_id" value="${record.maintenanceId}">
-                                    <input type="hidden" name="customer_name" value="${customerName}">
-                                    <button type="submit" class="btn-delete">
-                                        <i class="fas fa-trash"></i> 삭제
-                                    </button>
-                                </form>
-                            </div>
+                            <div class="history-actions"></div>
                         </div>
                     </c:forEach>
                 </c:when>

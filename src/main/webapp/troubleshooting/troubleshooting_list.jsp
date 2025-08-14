@@ -284,7 +284,6 @@
                         <th width="200">고객사</th>
                         <th width="150">발생일자</th>
                         <th width="120">작성자</th>
-                        <th width="150">작성일자</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -296,7 +295,7 @@
                                     ${ts.title}
                                 </a>
                             </td>
-                            <td>${ts.customerName}</td>
+                            <td class="text-center">${ts.customerName}</td>
                             <td class="text-center">
                                 <c:choose>
                                     <c:when test="${not empty ts.occurrenceDate}">
@@ -306,15 +305,13 @@
                                 </c:choose>
                             </td>
                             <td class="text-center">${ts.creator}</td>
-                            <td class="text-center">
-                                <fmt:formatDate value="${ts.createDate}" pattern="yyyy-MM-dd" />
-                            </td>
+                            
                         </tr>
                     </c:forEach>
                     
                     <c:if test="${empty troubleshootingList}">
                         <tr>
-                            <td colspan="5" class="empty-state">
+                            <td colspan="4" class="empty-state">
                                 <i class="fas fa-tools"></i>
                                 <div>등록된 트러블 슈팅이 없습니다.</div>
                             </td>

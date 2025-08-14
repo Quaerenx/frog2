@@ -38,110 +38,93 @@
         <c:remove var="error" scope="session" />
     </c:if>
     
-    <!-- 회의록 목록 -->
-    <div class="meeting-container table-container">
-        <c:choose>
-            <c:when test="${not empty meetingList}">
-                <table class="customer-table">
-                    <thead>
-                        <tr>
-                            <th>제목</th>
-                            <th>회의 일시</th>
-                            <th>작성자</th>
-                            <th>조회/댓글</th>
-                            <th>등록일</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="meeting" items="${meetingList}">
-                            <tr style="cursor:pointer;" onclick="location.href='${pageContext.request.contextPath}/meeting?view=view&id=${meeting.meetingId}'">
-                                <td>
-                                    <a href="${pageContext.request.contextPath}/meeting?view=view&id=${meeting.meetingId}" 
-                                       class="title-link" title="${meeting.title}">
-                                        ${meeting.title}
-                                    </a>
-                                </td>
-                                <td>
-                                    <fmt:formatDate value="${meeting.meetingDatetime}" pattern="MM/dd HH:mm"/>
-                                </td>
-                                <td class="text-center">${meeting.authorName}</td>
-                                <td>
-                                    <div class="stats-info">
-                                        <span class="view-count">조회 ${meeting.viewCount}</span>
-                                        <span class="comment-count">댓글 ${meeting.commentCount}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <fmt:formatDate value="${meeting.createdAt}" pattern="MM/dd"/>
-                                </td>
+    <!-- 회의록 목록 (troubleshooting_list 테이블 디자인 적용) -->
+    <style>
+        .troubleshooting-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .troubleshooting-table th {
+            background: #f8fafc; color: #374151; font-weight: 600;
+            padding: 1rem 0.75rem; text-align: center; border-bottom: 1px solid #e5e7eb;
+            position: sticky; top: 0; z-index: 10; white-space: nowrap;
+        }
+        .troubleshooting-table tbody tr { transition: all 0.2s ease; border-bottom: 1px solid #f3f4f6; cursor: pointer; }
+        .troubleshooting-table tbody tr:nth-child(even) { background-color: #fafbfc; }
+        .troubleshooting-table tbody tr:hover { background-color: #f5f7fb; box-shadow: 0 2px 8px rgba(61, 90, 128, 0.10); }
+        .troubleshooting-table td { padding: 0.75rem; border-right: 1px solid #f3f4f6; vertical-align: middle; color: #374151; }
+        .troubleshooting-table td:last-child { border-right: none; }
+        .title-link { color: #1f2937; text-decoration: none; font-weight: 500; }
+        .title-link:hover { color: var(--primary); text-decoration: underline; }
+    </style>
+
+    <div class="table-container">
+        <div class="table-wrapper">
+            <c:choose>
+                <c:when test="${not empty meetingList}">
+                    <table class="troubleshooting-table">
+                        <thead>
+                            <tr>
+                                <th>제목</th>
+                                <th width="120">글쓴이</th>
+                                <th width="160">회의 일시</th>
                             </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-                
-                <!-- 페이징 -->
-                <div class="pagination-container">
-                    <div class="page-info">
-                        ${currentPage} / ${totalPages} 페이지 (총 ${totalCount}건)
+                        </thead>
+                        <tbody>
+                            <c:forEach var="meeting" items="${meetingList}">
+                                <tr onclick="location.href='${pageContext.request.contextPath}/meeting?view=view&id=${meeting.meetingId}'">
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/meeting?view=view&id=${meeting.meetingId}"
+                                           class="title-link" onclick="event.stopPropagation();">
+                                            ${meeting.title}
+                                        </a>
+                                    </td>
+                                    <td class="text-center">${meeting.authorName}</td>
+                                    <td class="text-center">
+                                        <fmt:formatDate value="${meeting.meetingDatetime}" pattern="yyyy-MM-dd HH:mm"/>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+
+                    <!-- 페이징 -->
+                    <div class="pagination-container">
+                        <div class="page-info">
+                            ${currentPage} / ${totalPages} 페이지 (총 ${totalCount}건)
+                        </div>
+                        <div class="pagination">
+                            <c:if test="${currentPage > 1}">
+                                <a href="?view=list&page=1" class="page-link"><i class="fas fa-angle-double-left"></i></a>
+                                <a href="?view=list&page=${currentPage - 1}" class="page-link"><i class="fas fa-angle-left"></i></a>
+                            </c:if>
+                            <c:set var="startPage" value="${currentPage - 2}" />
+                            <c:set var="endPage" value="${currentPage + 2}" />
+                            <c:if test="${startPage < 1}"><c:set var="startPage" value="1" /></c:if>
+                            <c:if test="${endPage > totalPages}"><c:set var="endPage" value="${totalPages}" /></c:if>
+                            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+                                <c:choose>
+                                    <c:when test="${i == currentPage}"><span class="page-link active">${i}</span></c:when>
+                                    <c:otherwise><a href="?view=list&page=${i}" class="page-link">${i}</a></c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                            <c:if test="${currentPage < totalPages}">
+                                <a href="?view=list&page=${currentPage + 1}" class="page-link"><i class="fas fa-angle-right"></i></a>
+                                <a href="?view=list&page=${totalPages}" class="page-link"><i class="fas fa-angle-double-right"></i></a>
+                            </c:if>
+                        </div>
                     </div>
-                    
-                    <div class="pagination">
-                        <!-- 이전 페이지 -->
-                        <c:if test="${currentPage > 1}">
-                            <a href="?view=list&page=1" class="page-link">
-                                <i class="fas fa-angle-double-left"></i>
-                            </a>
-                            <a href="?view=list&page=${currentPage - 1}" class="page-link">
-                                <i class="fas fa-angle-left"></i>
-                            </a>
-                        </c:if>
-                        
-                        <!-- 페이지 번호 -->
-                        <c:set var="startPage" value="${currentPage - 2}" />
-                        <c:set var="endPage" value="${currentPage + 2}" />
-                        
-                        <c:if test="${startPage < 1}">
-                            <c:set var="startPage" value="1" />
-                        </c:if>
-                        <c:if test="${endPage > totalPages}">
-                            <c:set var="endPage" value="${totalPages}" />
-                        </c:if>
-                        
-                        <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                            <c:choose>
-                                <c:when test="${i == currentPage}">
-                                    <span class="page-link active">${i}</span>
-                                </c:when>
-                                <c:otherwise>
-                                    <a href="?view=list&page=${i}" class="page-link">${i}</a>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                        
-                        <!-- 다음 페이지 -->
-                        <c:if test="${currentPage < totalPages}">
-                            <a href="?view=list&page=${currentPage + 1}" class="page-link">
-                                <i class="fas fa-angle-right"></i>
-                            </a>
-                            <a href="?view=list&page=${totalPages}" class="page-link">
-                                <i class="fas fa-angle-double-right"></i>
-                            </a>
-                        </c:if>
+                </c:when>
+                <c:otherwise>
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard"></i>
+                        <h3>등록된 회의록이 없습니다</h3>
+                        <p>첫 번째 회의록을 작성해보세요.</p>
+                        <a href="${pageContext.request.contextPath}/meeting?view=write" class="add-button">
+                            <i class="fas fa-pen"></i>
+                            회의록 작성하기
+                        </a>
                     </div>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <div class="empty-state">
-                    <i class="fas fa-clipboard"></i>
-                    <h3>등록된 회의록이 없습니다</h3>
-                    <p>첫 번째 회의록을 작성해보세요.</p>
-                    <a href="${pageContext.request.contextPath}/meeting?view=write" class="add-button">
-                        <i class="fas fa-pen"></i>
-                        회의록 작성하기
-                    </a>
-                </div>
-            </c:otherwise>
-        </c:choose>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </div>
 </div>
 

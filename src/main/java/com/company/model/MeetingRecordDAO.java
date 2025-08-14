@@ -26,7 +26,7 @@ public class MeetingRecordDAO {
                         "FROM meeting_records m " +
                         "LEFT JOIN (SELECT meeting_id, COUNT(*) as comment_count FROM meeting_comments GROUP BY meeting_id) c " +
                         "ON m.meeting_id = c.meeting_id " +
-                        "ORDER BY m.created_at DESC " +
+                        "ORDER BY m.meeting_datetime DESC " +
                         "LIMIT ? OFFSET ?";
 
             pstmt = conn.prepareStatement(sql);

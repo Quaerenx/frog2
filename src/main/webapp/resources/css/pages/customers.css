@@ -970,6 +970,25 @@
     border: 1px solid #e5e7eb;
 }
 
+.detail-container .detail-section {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 20px;
+    margin: 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.detail-container .detail-section:last-child {
+    border-bottom: none;
+}
+
+.detail-container .detail-section .detail-section-title {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
 .detail-section {
     margin-bottom: 0;
     padding: 20px;

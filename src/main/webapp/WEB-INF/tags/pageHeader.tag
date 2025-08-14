@@ -9,7 +9,7 @@
     <div>
       <h1><jsp:invoke fragment="title"/></h1>
       <c:if test="${not empty subtitle}">
-        <p class="lead">
+        <p class="lead" style="text-align:left;">
           <jsp:invoke fragment="subtitle"/>
         </p>
       </c:if>

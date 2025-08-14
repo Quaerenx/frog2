@@ -7,14 +7,26 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ include file="/includes/header.jsp" %>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
+  <style>
+    .btn-min { padding: 6px 12px; border-radius: 6px; font-size: 14px; line-height: 1.2; border: 1px solid #e5e7eb; background: #ffffff; color: #374151; text-decoration: none; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-min:hover { background: #f3f4f6; color: #111827; }
+    .btn-min.danger { border-color: transparent; background: #ef4444; color: #ffffff; }
+    .btn-min.danger:hover { background: #dc2626; }
+  </style>
 
 <div class="container">
     <t:pageHeader>
         <jsp:attribute name="title"><i class="fas fa-edit"></i> 정기점검 이력 수정</jsp:attribute>
         <jsp:attribute name="subtitle">정기점검 이력 정보를 수정해주세요.</jsp:attribute>
         <jsp:attribute name="actions">
-            <a href="${pageContext.request.contextPath}/maintenance?view=history&customerName=${record.customerName}" class="add-button" style="background:#6b7280"><i class="fas fa-history"></i> 이력으로</a>
+            <form id="deleteFormHeader" method="post" action="${pageContext.request.contextPath}/maintenance" style="display:inline; margin-right:8px;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="maintenance_id" value="${record.maintenanceId}">
+                <input type="hidden" name="customer_name" value="${record.customerName}">
+                <button type="submit" class="btn-min danger"><i class="fas fa-trash"></i> 삭제</button>
+            </form>
+            <a href="${pageContext.request.contextPath}/maintenance?view=history&customerName=${record.customerName}" class="btn-min"><i class="fas fa-history"></i> 이력으로</a>
         </jsp:attribute>
     </t:pageHeader>
     
@@ -91,18 +103,12 @@
             
             <!-- 버튼 -->
             <div class="button-group">
-                <a href="${pageContext.request.contextPath}/maintenance?view=history&customerName=${record.customerName}" class="btn btn-cancel">취소</a>
+                <a href="${pageContext.request.contextPath}/maintenance?view=history&customerName=${record.customerName}}" class="btn btn-cancel">취소</a>
                 <button type="submit" class="btn btn-primary">수정하기</button>
-                <button type="button" class="btn btn-danger" onclick="confirmDelete()">삭제하기</button>
             </div>
         </form>
         
-        <!-- 삭제 폼 (숨김) -->
-        <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/maintenance" class="d-none">
-            <input type="hidden" name="action" value="delete">
-            <input type="hidden" name="maintenance_id" value="${record.maintenanceId}">
-            <input type="hidden" name="customer_name" value="${record.customerName}">
-        </form>
+        
     </div>
 </div>
 

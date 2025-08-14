@@ -28,10 +28,10 @@
     <div class="customer-management">
         <t:pageHeader>
           <jsp:attribute name="title"><i class="fas fa-th-large"></i> 대시보드</jsp:attribute>
-          <jsp:attribute name="subtitle">업무 바로가기와 핵심 메뉴를 한눈에 확인하세요</jsp:attribute>
-          <jsp:attribute name="actions">
-            <a href="${pageContext.request.contextPath}/customers?view=list" class="add-button"><i class="fas fa-building"></i> 고객사 정보</a>
-            <a href="${pageContext.request.contextPath}/maintenance?view=cards" class="add-button" style="background:#6b7280"><i class="fas fa-clipboard-check"></i> 정기점검</a>
+          <jsp:attribute name="subtitle">
+            업무 바로가기와 핵심 메뉴를 한눈에 확인하세요
+            <br/>
+            <span style="display:block; margin-top:6px; font-weight:600;">안녕하세요 <c:out value="${sessionScope.user != null ? sessionScope.user.userName : ''}"/> 님</span>
           </jsp:attribute>
         </t:pageHeader>
         <div class="card-grid">
@@ -66,7 +66,9 @@
                 <i class="fas fa-image"></i> 임시
               </div>
               <div class="card-body text-center">
-                <img src="${pageContext.request.contextPath}/resources/images/images/ollama.png" alt="sample" style="max-width:100%; height:auto; border-radius:6px;" />
+                <a href="https://x2wizard.github.io/" target="_blank" rel="noopener noreferrer">
+                  <img src="${pageContext.request.contextPath}/resources/images/images/ollama.png" alt="sample" style="max-width:100%; height:auto; border-radius:6px;" />
+                </a>
               </div>
             </div>
           </div>
