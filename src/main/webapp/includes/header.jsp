@@ -73,7 +73,7 @@
 							    </a>
 							</li>
                             <li>
-                                <a href="${pageContext.request.contextPath}/downlist.jsp">
+                                <a href="${pageContext.request.contextPath}/filerepo/filerepo_downlist.jsp">
                                     <i class="fas fa-file-alt mr-2"></i>자료실
                                 </a>
                             </li>
@@ -117,7 +117,7 @@
             const query = window.location.search;
             
             // 자료관리 메뉴 활성화
- 		    if (path.includes('/archive') || path.includes('/meeting') || path.includes('/downlist') || path.includes('/troubleshooting')) {
+            if (path.includes('/filerepo') || path.includes('/archive') || path.includes('/meeting') || path.includes('/downlist') || path.includes('/troubleshooting')) {
         	$('.main-nav ul li.dropdown').eq(1).addClass('active');
             }
             
@@ -126,5 +126,21 @@
             $('.main-nav ul li.dropdown').eq(0).addClass('active');
                 
             }
+
+            // 모바일에서 바깥 영역 클릭 시 드롭다운 닫기
+            $(document).on('click', function(e) {
+                if ($(window).width() <= 768) {
+                    if (!$(e.target).closest('.main-nav ul li.dropdown').length) {
+                        $('.main-nav ul li.dropdown').removeClass('open');
+                    }
+                }
+            });
+
+            // 모바일에서 드롭다운 항목 클릭 시 닫기
+            $('.main-nav ul li.dropdown .dropdown-menu a').on('click', function() {
+                if ($(window).width() <= 768) {
+                    $('.main-nav ul li.dropdown').removeClass('open');
+                }
+            });
         });
     </script>

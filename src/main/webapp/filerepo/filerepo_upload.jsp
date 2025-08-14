@@ -22,8 +22,15 @@
     
     String baseDir = "/files";
     String realPath = application.getRealPath(baseDir + "/" + relativePath);
+    if (realPath == null) {
+        out.println("<h3>서버 설정 문제로 실제 경로를 확인할 수 없습니다.</h3>\n<p>관리자에게 웹앱이 압축 해제(Exploded) 형태로 배포되었는지 확인 요청해주세요.</p>");
+        return;
+    }
     File currentDir = new File(realPath);
-    if (!currentDir.exists() || !currentDir.isDirectory()) {
+    if (!currentDir.exists()) {
+        currentDir.mkdirs();
+    }
+    if (!currentDir.isDirectory()) {
         out.println("<h3>잘못된 경로입니다.</h3>");
         return;
     }
@@ -43,26 +50,26 @@
 </head>
 <body>
     <!-- Header Include -->
-    <%@ include file="includes/header.jsp" %>
+    <%@ include file="/includes/header.jsp" %>
 
     <div class="container">
         <div class="upload-main">
             <!-- 뒤로가기 링크 -->
-            <a href="downlist.jsp?path=<%= relativePath %>" class="back-link">
+            <a href="filerepo_downlist.jsp?path=<%= relativePath %>" class="back-link">
                 ⬅️ 파일 목록으로 돌아가기
             </a>
 
             <!-- 현재 경로 표시 -->
             <div class="breadcrumb">
                 <strong>📤 업로드 위치:</strong> 
-                <a href="downlist.jsp">/</a><%
+                <a href="filerepo_downlist.jsp">/</a><%
                 if (!relativePath.isEmpty()) {
                     String[] parts = relativePath.split("/");
                     String currentPath = "";
                     for (int i = 0; i < parts.length; i++) {
                         if (!parts[i].isEmpty()) {
                             currentPath += parts[i];
-                            out.print("<a href=\"downlist.jsp?path=" + currentPath + "\">" + parts[i] + "</a>");
+                            out.print("<a href=\"filerepo_downlist.jsp?path=" + currentPath + "\">" + parts[i] + "</a>");
                             if (i < parts.length - 1) out.print("/");
                             currentPath += "/";
                         }
@@ -132,7 +139,7 @@
     </div>
 
     <!-- Footer Include -->
-    <%@ include file="includes/footer.jsp" %>
+    <%@ include file="/includes/footer.jsp" %>
 
     <script>
         // 전역 변수
@@ -459,7 +466,7 @@
                     setTimeout(function() {
                         const pathInput = document.querySelector('input[name="path"]');
                         const pathParam = pathInput && pathInput.value ? '?path=' + pathInput.value : '';
-                        window.location.href = 'downlist.jsp' + pathParam;
+                        window.location.href = 'filerepo_downlist.jsp' + pathParam;
                     }, 3000);
                     
                 } else {
@@ -489,7 +496,7 @@
                 }
             });
 
-            xhr.open('POST', 'uploadProcess.jsp', true);
+            xhr.open('POST', 'filerepo_uploadProcess.jsp', true);
             xhr.timeout = 300000;
             xhr.send(formData);
             
@@ -498,3 +505,5 @@
     </script>
 </body>
 </html>
+
+

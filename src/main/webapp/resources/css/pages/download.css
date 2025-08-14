@@ -16,18 +16,20 @@
 
 .file-main {
     width: 100%;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: var(--space-24);
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
 }
 
 .breadcrumb {
-    background: #f8f9fa;
-    padding: 15px 20px;
-    border-radius: 6px;
-    margin-bottom: 20px;
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
     font-size: 14px;
+    border: 1px solid #e5e7eb;
 }
 
 .breadcrumb a {
@@ -47,12 +49,12 @@
 }
 
 .file-table th {
-    background: #f8f9fa;
-    padding: 12px 8px;
+    background: #f3f4f6;
+    padding: 12px 12px;
     text-align: left;
-    border-bottom: 2px solid #dee2e6;
-    font-weight: 600;
-    color: #495057;
+    border-bottom: 1px solid #e5e7eb;
+    font-weight: 700;
+    color: #333333;
 }
 
 .file-table th a {
@@ -65,14 +67,13 @@
 }
 
 .file-table td {
-    padding: 8px;
-    border-bottom: 1px solid #f1f3f4;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f3f4f6;
     vertical-align: middle;
 }
 
-.file-table tr:hover {
-    background-color: #f8f9fa;
-}
+.file-table tbody tr:nth-child(even) td { background: #fbfcfe; }
+.file-table tbody tr:hover td { background: #f5f7fb; }
 
 .icon {
     width: 20px;
@@ -112,21 +113,17 @@
     white-space: nowrap;
 }
 
-.parent-dir {
-    background: #e3f2fd;
-}
-
-.parent-dir:hover {
-    background: #bbdefb;
-}
+.parent-dir { background: #eef2ff; }
+.parent-dir:hover { background: #e0e7ff; }
 
 .stats {
-    background: #f8f9fa;
-    padding: 10px 20px;
-    border-radius: 6px;
-    margin-top: 20px;
-    font-size: 12px;
-    color: #6c757d;
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
 }
 
 .file-footer {
@@ -139,15 +136,16 @@
 
 /* 업로드 버튼 스타일 */
 .upload-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 15px 20px;
+    background: #ffffff;
+    padding: 12px 16px;
     border-radius: 8px;
-    margin-bottom: 20px;
-    color: white;
+    margin-bottom: 16px;
+    color: #374151;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    border: 1px solid #e5e7eb;
 }
 
 .upload-info {
@@ -166,26 +164,25 @@
 }
 
 .upload-btn {
-    background: rgba(255,255,255,0.2);
-    border: 2px solid rgba(255,255,255,0.3);
-    color: white;
-    padding: 8px 20px;
-    border-radius: 25px;
+    background: var(--primary);
+    border: 1px solid transparent;
+    color: #ffffff;
+    padding: 8px 14px;
+    border-radius: 8px;
     text-decoration: none;
     font-weight: 500;
-    transition: all 0.3s ease;
-    display: flex;
+    transition: all 0.2s ease;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
 .upload-btn:hover {
-    background: rgba(255,255,255,0.3);
-    border-color: rgba(255,255,255,0.5);
-    color: white;
+    background: #2f4968;
+    color: #ffffff;
     text-decoration: none;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(61, 90, 128, 0.15);
 }
 
 .upload-btn:active {

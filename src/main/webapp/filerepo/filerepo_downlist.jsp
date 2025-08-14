@@ -2,6 +2,8 @@
 <%@ page import="java.io.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%
     // 세션 확인
     HttpSession userSession = request.getSession(false);
@@ -10,6 +12,25 @@
         return;
     }
 %>
+
+<c:set var="pageTitle" value="업무자료" scope="request" />
+<c:set var="pageBodyClass" value="page-1050 page-customers" scope="request" />
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${pageTitle}</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main_style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/components.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/utilities.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/dashboard_box.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/download.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body class="page-1050 page-customers">
 
 <%
     String baseDir = "/files";
@@ -23,8 +44,15 @@
     }
     
     String realPath = application.getRealPath(baseDir + "/" + relativePath);
+    if (realPath == null) {
+        out.println("<h3>서버 설정 문제로 실제 경로를 확인할 수 없습니다.</h3>");
+        return;
+    }
     File currentDir = new File(realPath);
-    if (!currentDir.exists() || !currentDir.isDirectory()) {
+    if (!currentDir.exists()) {
+        currentDir.mkdirs();
+    }
+    if (!currentDir.isDirectory()) {
         out.println("<h3>잘못된 경로입니다.</h3>");
         return;
     }
@@ -50,25 +78,30 @@
 %>
 
 <!-- Header Include -->
-<%@ include file="includes/header.jsp" %>
+<%@ include file="/includes/header.jsp" %>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/download.css">
+<c:set var="currentPathText" value="/" />
+<c:if test="${not empty param.path}">
+    <c:set var="currentPathText" value="/${param.path}" />
+</c:if>
 
-<main class="main-content">
-    <div class="container">
-        <div class="jumbotron">
-            <% if ("success".equals(request.getParameter("upload"))) { %>
-            <div class="alert alert-success alert-dismissible fade show">
-                ✅ 파일이 성공적으로 업로드되었습니다!
-                <button type="button" class="close" data-dismiss="alert">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <% } %>
-            <h1>업무자료 파일서버</h1>
-            <p class="lead">업무에 필요한 파일을 안전하고 빠르게 공유할 수 있습니다.</p>
-        </div>
+<div class="customer-management">
+    <t:pageHeader>
+        <jsp:attribute name="title">
+            <i class="fas fa-file-alt"></i> 업무자료
+        </jsp:attribute>
+        <jsp:attribute name="subtitle">
+            현재 위치: ${currentPathText}
+        </jsp:attribute>
+        <jsp:attribute name="actions">
+            <a href="filerepo_upload.jsp?path=${param.path}" class="add-button">
+                <i class="fas fa-upload"></i> 업로드
+            </a>
+        </jsp:attribute>
+    </t:pageHeader>
 
+    <div class="table-container">
+        <div class="table-wrapper">
         <div class="file-main">
             <!-- 업로드 섹션 -->
             <div class="upload-section">
@@ -76,7 +109,7 @@
                     <h5>📤 파일 업로드</h5>
                     <small>이 폴더에 새 파일을 업로드할 수 있습니다</small>
                 </div>
-                <a href="upload.jsp?path=<%= relativePath %>" class="upload-btn">
+                <a href="filerepo_upload.jsp?path=<%= relativePath %>" class="upload-btn">
                     <span>📁</span>
                     파일 업로드하기
                 </a>
@@ -84,14 +117,14 @@
 
             <div class="breadcrumb">
                 <strong>📍 현재 위치:</strong> 
-                <a href="downlist.jsp">/</a><%
+                <a href="filerepo_downlist.jsp">/</a><%
                 if (!relativePath.isEmpty()) {
                     String[] parts = relativePath.split("/");
                     String currentPath = "";
                     for (int i = 0; i < parts.length; i++) {
                         if (!parts[i].isEmpty()) {
                             currentPath += parts[i];
-                            out.print("<a href=\"downlist.jsp?path=" + currentPath + "\">" + parts[i] + "</a>");
+                            out.print("<a href=\"filerepo_downlist.jsp?path=" + currentPath + "\">" + parts[i] + "</a>");
                             if (i < parts.length - 1) out.print("/");
                             currentPath += "/";
                         }
@@ -127,7 +160,7 @@
                     <tr class="parent-dir">
                         <td><span class="icon">⬆️</span></td>
                         <td class="file-name">
-                            <a href="downlist.jsp?path=<%= parentPath %>"><strong>상위 디렉토리</strong></a>
+                            <a href="filerepo_downlist.jsp?path=<%= parentPath %>"><strong>상위 디렉토리</strong></a>
                         </td>
                         <td class="date">-</td>
                         <td class="size">-</td>
@@ -153,7 +186,7 @@
                     <tr class="directory">
                         <td><span class="icon">📁</span></td>
                         <td class="file-name">
-                            <a href="downlist.jsp?path=<%= encodedPath %>"><%= name %>/</a>
+                            <a href="filerepo_downlist.jsp?path=<%= encodedPath %>"><%= name %>/</a>
                         </td>
                         <td class="date"><%= dateFormat.format(lastModified) %></td>
                         <td class="size">-</td>
@@ -202,7 +235,7 @@
                     <tr>
                         <td><span class="icon"><%= icon %></span></td>
                         <td class="file-name">
-                            <a href="download.jsp?path=<%= relativePath.isEmpty() ? "" : (relativePath + "/") %>&filename=<%= name %>">
+                            <a href="filerepo_download.jsp?path=<%= relativePath.isEmpty() ? "" : (relativePath + "/") %>&filename=<%= name %>">
                                 <%= name %>
                             </a>
                         </td>
@@ -241,7 +274,7 @@
                         <td colspan="5" class="text-center p-5 text-muted">
                             📭 이 폴더는 비어 있습니다.
                             <br><br>
-                            <a href="upload.jsp?path=<%= relativePath %>" class="text-primary text-decoration-none">
+                            <a href="filerepo_upload.jsp?path=<%= relativePath %>" class="text-primary text-decoration-none">
                                 📤 첫 번째 파일을 업로드해보세요
                             </a>
                         </td>
@@ -281,13 +314,19 @@
                 <% } %>
             </div>
         </div>
+        </div>
+    </div>
+  </div>
 
         <div class="file-footer">
             <p>🔒 보안 파일 서버 | 안전한 파일 공유를 위해 항상 최신 보안을 유지합니다.</p>
             <p>© 2025 File Server. 무단 접근을 금지합니다.</p>
         </div>
-    </div>
-</main>
 
 <!-- Footer Include -->
-<%@ include file="includes/footer.jsp" %>
+<%@ include file="/includes/footer.jsp" %>
+
+</body>
+</html>
+
+

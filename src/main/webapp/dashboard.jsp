@@ -44,8 +44,12 @@
               <div class="card-body">
                 <ul class="dashboard-submenu">
                   <c:forEach var="menuItem" items="${entry.value}">
+                    <c:set var="resolvedUrl" value="${menuItem.url}" />
+                    <c:if test="${resolvedUrl == 'downlist.jsp'}">
+                      <c:set var="resolvedUrl" value="filerepo/filerepo_downlist.jsp" />
+                    </c:if>
                     <li>
-                      <a href="${pageContext.request.contextPath}/${menuItem.url}">
+                      <a href="${pageContext.request.contextPath}/${resolvedUrl}">
                         <i class="${menuItem.icon} mr-2"></i>${menuItem.title}
                       </a>
                     </li>

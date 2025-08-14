@@ -153,10 +153,10 @@ try {
             <%= results.toString() %>
         </div>
         <div class="text-center">
-            <a href="downlist.jsp?path=<%= uploadPath %>" class="btn btn-primary">
+            <a href="filerepo_downlist.jsp?path=<%= uploadPath %>" class="btn btn-primary">
                 📁 파일 목록으로 돌아가기
             </a>
-            <a href="upload.jsp?path=<%= uploadPath %>" class="btn btn-secondary ml-2">
+            <a href="filerepo_upload.jsp?path=<%= uploadPath %>" class="btn btn-secondary ml-2">
                 📤 추가 업로드
             </a>
         </div>
@@ -165,19 +165,21 @@ try {
     <script>
         // 5초 후 자동으로 파일 목록으로 이동
         setTimeout(function() {
-            window.location.href = 'downlist.jsp?path=<%= uploadPath %>';
+            window.location.href = 'filerepo_downlist.jsp?path=<%= uploadPath %>';
         }, 5000);
     </script>
 </body>
 </html>
 <%
     } else {
-        response.sendRedirect("upload.jsp?path=" + uploadPath + "&error=no_files");
+        response.sendRedirect("filerepo_upload.jsp?path=" + uploadPath + "&error=no_files");
     }
     
 } catch (Exception e) {
     out.println("❌ 업로드 오류: " + e.getMessage());
-    out.println("<br><a href='upload.jsp?path=" + uploadPath + "'>다시 시도</a>");
+    out.println("<br><a href='filerepo_upload.jsp?path=" + uploadPath + "'>다시 시도</a>");
     e.printStackTrace();
 }
 %>
+
+
