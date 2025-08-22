@@ -26,7 +26,11 @@
                 <input type="hidden" name="customer_name" value="${record.customerName}">
                 <button type="submit" class="btn-min danger"><i class="fas fa-trash"></i> 삭제</button>
             </form>
-            <a href="${pageContext.request.contextPath}/maintenance?view=history&customerName=${record.customerName}" class="btn-min"><i class="fas fa-history"></i> 이력으로</a>
+            <c:url value="/maintenance" var="headerHistoryUrl">
+                <c:param name="view" value="history"/>
+                <c:param name="customerName" value="${record.customerName}"/>
+            </c:url>
+            <a href="${headerHistoryUrl}" class="btn-min"><i class="fas fa-history"></i> 이력으로</a>
         </jsp:attribute>
     </t:pageHeader>
     
@@ -103,7 +107,11 @@
             
             <!-- 버튼 -->
             <div class="button-group">
-                <a href="${pageContext.request.contextPath}/maintenance?view=history&customerName=${record.customerName}}" class="btn btn-cancel">취소</a>
+                <c:url value="/maintenance" var="cancelUrl">
+                    <c:param name="view" value="history"/>
+                    <c:param name="customerName" value="${record.customerName}"/>
+                </c:url>
+                <a href="${cancelUrl}" class="btn btn-cancel">취소</a>
                 <button type="submit" class="btn btn-primary">수정하기</button>
             </div>
         </form>
