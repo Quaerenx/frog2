@@ -134,6 +134,21 @@
         color: #991b1b;
         border-left: 4px solid #ef4444;
     }
+
+    /* 상단 툴바 - 정돈된 레이아웃 */
+    .mh-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px 0 12px; border-bottom: 1px solid #e5e7eb; }
+    .mh-toolbar__title { display: flex; align-items: baseline; gap: 8px; }
+    .mh-toolbar__title h3 { margin: 0; font-size: 18px; font-weight: 600; color: #111827; }
+    .mh-toolbar__meta { font-size: 13px; color: #6b7280; }
+    .mh-toolbar__actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .mh-toolbar__filters { display: flex; align-items: center; gap: 8px; }
+    .mh-toolbar__buttons { display: flex; align-items: center; gap: 8px; }
+    .mh-toolbar input.form-control, .mh-toolbar select.form-control, .mh-toolbar .btn-min { height: 34px; line-height: 32px; padding: 0 10px; }
+    @media (max-width: 768px) {
+      .mh-toolbar { align-items: flex-start; }
+      .mh-toolbar__actions { width: 100%; justify-content: flex-start; }
+      .mh-toolbar__filters { width: 100%; flex-wrap: wrap; }
+    }
     
     /* 정기점검 이력 카드 */
     .history-container {
@@ -448,6 +463,31 @@
         </div>
         <c:remove var="error" scope="session" />
     </c:if>
+    
+    <!-- 상단 툴바 -->
+    <div class="mh-toolbar">
+        <div class="mh-toolbar__title">
+            <h3>정기점검 이력</h3>
+            <span class="mh-toolbar__meta">총 ${records != null ? records.size() : 0}건</span>
+        </div>
+        <div class="mh-toolbar__actions">
+            <div class="mh-toolbar__filters">
+                <input type="text" class="form-control" name="q" placeholder="검색어">
+                <select class="form-control" name="status">
+                    <option value="">전체</option>
+                    <option value="completed">완료</option>
+                    <option value="pending">대기</option>
+                </select>
+                <input type="date" class="form-control" name="from">
+                <input type="date" class="form-control" name="to">
+            </div>
+            <div class="mh-toolbar__buttons">
+                <a href="${pageContext.request.contextPath}/maintenance?view=add&customerName=${customerName}" class="btn-min">
+                    <i class="fas fa-plus"></i> 새 점검 이력 추가
+                </a>
+            </div>
+        </div>
+    </div>
     
     <!-- 정기점검 이력 목록 -->
     <div class="history-container">

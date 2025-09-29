@@ -72,6 +72,7 @@
 	    font-size: 14px;
 	    line-height: 1.6;
 	    color: #374151;
+	    white-space: pre-wrap; 
 	}
 
 	/* 3. 여백 및 정렬 개선 */
@@ -79,11 +80,29 @@
 	    display: grid;
 	    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 	    gap: 24px;
-	}
+	}	
 
 	.detail-item.full-width {
 	    grid-column: 1 / -1;
 	}
+
+	/* 탭 UI */
+	.env-tabs { margin-top: 16px; }
+	.tab-nav { display: flex; gap: 8px; border-bottom: 1px; margin: 0; padding-left: 8px; }
+	.tab-btn { padding: 10px 14px; border: 1px solid #e5e7eb; border-bottom: none; background: #f9fafb; color: #374151; border-top-left-radius: 8px; border-top-right-radius: 8px; cursor: pointer; }
+	.tab-btn.active { background: #ffffff; color: #111827; font-weight: 600; border-color: #d1d5db; }
+	.tab-btn.disabled { opacity: 0.5; cursor: not-allowed; }
+	.tab-panel { display: none; }
+	.tab-panel.active { display: block; }
+	/* 탭과 첫 섹션 사이 간격 최소화 */
+	.env-tabs .tab-panel { margin-top: 0; padding-top: 0; }
+	.env-tabs .tab-panel > .detail-section:first-child { margin-top: 0; }
+
+	/* 탭 버튼이 카드 상단에 자연스럽게 붙도록 보더 겹침 처리 */
+	.env-tabs .tab-nav { margin-bottom: 0; }
+	 /*.env-tabs .tab-btn { border-bottom: 1px solid #e5e7eb; }*/
+	.env-tabs .tab-btn.active { border-bottom-color: #ffffff; margin-bottom: -1px; }
+	.env-tabs .tab-panel > .detail-section:first-child { border-top-left-radius: 0; border-top-right-radius: 0; }
 </style>
 
 <c:set var="currentCustomerName" value="${not empty customerDetail.customerName ? customerDetail.customerName : (not empty customer.customerName ? customer.customerName : '')}" />
@@ -141,7 +160,16 @@
         <c:remove var="error" scope="session" />
     </c:if>
     
-    <c:if test="${not empty customerDetail}">
+    <c:set var="hasAnyDetail" value="${not empty customerDetail or not empty customerDetailStg or not empty customerDetailDev}" />
+    <c:if test="${hasAnyDetail}">
+        <div class="detail-container env-tabs">
+            <div class="tab-nav">
+                <button type="button" class="tab-btn" data-target="env-prod">운영</button>
+                <button type="button" class="tab-btn" data-target="env-stg">스테이징</button>
+                <button type="button" class="tab-btn" data-target="env-dev">개발</button>
+            </div>
+            <div class="tab-panel" id="env-prod">
+        <c:if test="${not empty customerDetail}">
         <div class="detail-container">
             <div class="detail-section">
                 <div class="detail-section-title">
@@ -406,6 +434,30 @@
             </div>
         </div>
     </c:if>
+    <c:if test="${empty customerDetail}">
+        <div class="alert alert-light">운영 환경 데이터가 없습니다.</div>
+    </c:if>
+    </div>
+    <div class="tab-panel" id="env-stg">
+        <c:if test="${empty customerDetailStg}">
+            <div class="alert alert-light">스테이징 환경 데이터가 없습니다.</div>
+        </c:if>
+        <c:if test="${not empty customerDetailStg}">
+            <c:set var="detail" value="${customerDetailStg}" />
+            <%@ include file="/customers/_detail_sections.jspf" %>
+        </c:if>
+    </div>
+    <div class="tab-panel" id="env-dev">
+        <c:if test="${empty customerDetailDev}">
+            <div class="alert alert-light">개발 환경 데이터가 없습니다.</div>
+        </c:if>
+        <c:if test="${not empty customerDetailDev}">
+            <c:set var="detail" value="${customerDetailDev}" />
+            <%@ include file="/customers/_detail_sections.jspf" %>
+        </c:if>
+    </div>
+    </div>
+    </c:if>
     
     <c:if test="${empty customerDetail and not empty customer}">
         <div class="detail-container">
@@ -430,7 +482,7 @@
         </div>
     </c:if>
     
-    <c:if test="${empty customer and empty customerDetail}">
+    <c:if test="${empty customer and not hasAnyDetail}">
         <div class="detail-container">
             <div class="detail-section text-center p-5">
                 <i class="fas fa-exclamation-triangle text-danger" style="font-size: 3rem; margin-bottom: 1rem;"></i>
@@ -445,7 +497,7 @@
     </c:if>
 
     <div class="detail-actions" style="display:flex; justify-content:flex-end; gap:8px; margin:12px 0 0 0;">
-        <a href="javascript:void(0)" onclick="editCustomer('${currentCustomerName}')" class="btn-min primary">
+        <a href="javascript:void(0)" onclick="editCustomer('${currentCustomerName}', getActiveEnv())" class="btn-min primary">
             <i class="fas fa-edit"></i> 정보수정
         </a>
         <a href="javascript:void(0)" onclick="deleteCustomer('${currentCustomerName}')" class="btn-min danger">
@@ -455,9 +507,54 @@
 </div>
 
 <script>
-function editCustomer(customerName) {
-	var encodedName = encodeURIComponent(customerName);
-	window.location.href = '${pageContext.request.contextPath}/customers?view=editDetail&customerName=' + encodedName;
+// 탭 전환 스크립트
+document.addEventListener('DOMContentLoaded', function() {
+	var tabs = document.querySelectorAll('.tab-btn');
+	var panels = document.querySelectorAll('.tab-panel');
+
+	function setActive(targetId) {
+		panels.forEach(function(p){ p.classList.remove('active'); });
+		tabs.forEach(function(t){ t.classList.remove('active'); });
+		var target = document.getElementById(targetId);
+		if (target) target.classList.add('active');
+		var btn = document.querySelector('.tab-btn[data-target="' + targetId + '"]');
+		if (btn) btn.classList.add('active');
+	}
+
+	// 초기 활성 탭 결정: URL env 우선, 없으면 운영 > 스테이징 > 개발 순
+	var initial = 'env-prod';
+	var params = new URLSearchParams(window.location.search);
+	var envParam = params.get('env');
+	if (envParam === 'stg') initial = 'env-stg';
+	if (envParam === 'dev') initial = 'env-dev';
+	var prodEmpty = document.querySelector('#env-prod .alert');
+	var stgEmpty = document.querySelector('#env-stg .alert');
+	var devEmpty = document.querySelector('#env-dev .alert');
+	if (prodEmpty) {
+		if (!stgEmpty) initial = 'env-stg';
+		else if (!devEmpty) initial = 'env-dev';
+	}
+	setActive(initial);
+
+	tabs.forEach(function(tab){
+		tab.addEventListener('click', function(){
+			setActive(tab.getAttribute('data-target'));
+		});
+	});
+});
+function getActiveEnv() {
+    var active = document.querySelector('.tab-btn.active');
+    if (!active) return 'prod';
+    var target = active.getAttribute('data-target');
+    if (target === 'env-stg') return 'stg';
+    if (target === 'env-dev') return 'dev';
+    return 'prod';
+}
+function editCustomer(customerName, env) {
+    var encodedName = encodeURIComponent(customerName);
+    var url = '${pageContext.request.contextPath}/customers?view=editDetail&customerName=' + encodedName;
+    if (env) url += '&env=' + encodeURIComponent(env);
+    window.location.href = url;
 }
 
 function deleteCustomer(customerName) {
