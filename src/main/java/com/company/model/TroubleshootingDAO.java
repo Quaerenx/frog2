@@ -23,7 +23,8 @@ public class TroubleshootingDAO {
         try {
             conn = DBConnection.getConnection();
             String sql = "SELECT id, title, customer_name, occurrence_date, creator, create_date " +
-                        "FROM troubleshooting ORDER BY create_date DESC";
+                        // 정렬: 발생일자 내림차순, NULL은 뒤로, 동일 시 생성일 내림차순
+                        "FROM troubleshooting ORDER BY occurrence_date DESC";
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
 
@@ -81,7 +82,8 @@ public class TroubleshootingDAO {
                 "   OR CAST(SUBSTR(action_taken,1,65000) AS VARCHAR(65000)) ILIKE CAST(? AS VARCHAR(65000)) " +
                 "   OR CAST(SUBSTR(script_content,1,65000) AS VARCHAR(65000)) ILIKE CAST(? AS VARCHAR(65000)) " +
                 "   OR CAST(SUBSTR(note,1,65000) AS VARCHAR(65000)) ILIKE CAST(? AS VARCHAR(65000)) " +
-                "ORDER BY create_date DESC";
+                // 정렬: 발생일자 내림차순, NULL은 뒤로, 동일 시 생성일 내림차순
+                "ORDER BY occurrence_date DESC NULLS LAST, create_date DESC";
 
             pstmt = conn.prepareStatement(sql);
             String like = "%" + query.trim() + "%";

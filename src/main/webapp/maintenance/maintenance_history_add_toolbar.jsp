@@ -531,6 +531,19 @@
                                         </c:choose>
                                     </span>
                                 </div>
+                                <div class="detail-group">
+                                    <span class="detail-label">라이선스</span>
+                                    <span class="detail-value">
+                                        <c:choose>
+                                            <c:when test="${not empty record.licenseSizeGb || not empty record.licenseUsageSize || not empty record.licenseUsagePct}">
+                                                <c:if test="${not empty record.licenseSizeGb}">${record.licenseSizeGb}GB</c:if>
+                                                <c:if test="${not empty record.licenseUsageSize}"><c:if test="${not empty record.licenseSizeGb}">, </c:if>${record.licenseUsageSize}GB 사용</c:if>
+                                                <c:if test="${not empty record.licenseUsagePct}"><c:if test="${not empty record.licenseSizeGb || not empty record.licenseUsageSize}">, </c:if>${record.licenseUsagePct}%</c:if>
+                                            </c:when>
+                                            <c:otherwise>-</c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                </div>
                             </div>
                             <c:if test="${not empty record.note}">
                                 <div class="history-note"><div class="note-label"><i class="fas fa-sticky-note"> 점검 내용 및 비고</i>

@@ -27,17 +27,12 @@ public class MaintenanceRecordDAO {
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                MaintenanceRecordDTO record = new MaintenanceRecordDTO();
-                record.setMaintenanceId(rs.getLong("maintenance_id"));
-                record.setCustomerName(rs.getString("customer_name"));
-                record.setInspectorName(rs.getString("inspector_name"));
-                record.setInspectionDate(rs.getDate("inspection_date"));
-                record.setVerticaVersion(rs.getString("vertica_version"));
-                record.setNote(rs.getString("note"));
-                record.setCreatedAt(rs.getTimestamp("created_at"));
-                record.setUpdatedAt(rs.getTimestamp("updated_at"));
+            boolean hasSize = columnExists(conn, "maintenance_records", "license_size_gb");
+            boolean hasUsagePct = columnExists(conn, "maintenance_records", "license_usage_pct");
+            boolean hasUsageSize = columnExists(conn, "maintenance_records", "license_usage_size");
 
+            while (rs.next()) {
+                MaintenanceRecordDTO record = mapRowToDto(rs, hasSize, hasUsagePct, hasUsageSize);
                 String inspectorName = record.getInspectorName();
                 inspectorRecords.computeIfAbsent(inspectorName, k -> new ArrayList<>()).add(record);
             }
@@ -63,17 +58,12 @@ public class MaintenanceRecordDAO {
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                MaintenanceRecordDTO record = new MaintenanceRecordDTO();
-                record.setMaintenanceId(rs.getLong("maintenance_id"));
-                record.setCustomerName(rs.getString("customer_name"));
-                record.setInspectorName(rs.getString("inspector_name"));
-                record.setInspectionDate(rs.getDate("inspection_date"));
-                record.setVerticaVersion(rs.getString("vertica_version"));
-                record.setNote(rs.getString("note"));
-                record.setCreatedAt(rs.getTimestamp("created_at"));
-                record.setUpdatedAt(rs.getTimestamp("updated_at"));
+            boolean hasSize = columnExists(conn, "maintenance_records", "license_size_gb");
+            boolean hasUsagePct = columnExists(conn, "maintenance_records", "license_usage_pct");
+            boolean hasUsageSize = columnExists(conn, "maintenance_records", "license_usage_size");
 
+            while (rs.next()) {
+                MaintenanceRecordDTO record = mapRowToDto(rs, hasSize, hasUsagePct, hasUsageSize);
                 records.add(record);
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -114,7 +104,7 @@ public class MaintenanceRecordDAO {
         return customers;
     }
 
-    // 새로운 정기점검 이력 추가
+    // 새로운 정기점검 이력 추가 (존재하는 컬럼만 동적으로 포함)
     public boolean addMaintenanceRecord(MaintenanceRecordDTO record) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -122,15 +112,43 @@ public class MaintenanceRecordDAO {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "INSERT INTO maintenance_records (customer_name, inspector_name, " +
-                        "inspection_date, vertica_version, note) VALUES (?, ?, ?, ?, ?)";
+            boolean hasSize = columnExists(conn, "maintenance_records", "license_size_gb");
+            boolean hasUsagePct = columnExists(conn, "maintenance_records", "license_usage_pct");
+            boolean hasUsageSize = columnExists(conn, "maintenance_records", "license_usage_size");
 
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, record.getCustomerName());
-            pstmt.setString(2, record.getInspectorName());
-            pstmt.setDate(3, record.getInspectionDate());
-            setStringOrNull(pstmt, 4, record.getVerticaVersion());
-            setStringOrNull(pstmt, 5, record.getNote());
+            // 기본 컬럼
+            List<String> cols = new ArrayList<>();
+            cols.add("customer_name");
+            cols.add("inspector_name");
+            cols.add("inspection_date");
+            cols.add("vertica_version");
+            cols.add("note");
+
+            // 선택 컬럼
+            if (hasSize) cols.add("license_size_gb");
+            if (hasUsageSize) cols.add("license_usage_size");
+            if (hasUsagePct) cols.add("license_usage_pct");
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("INSERT INTO maintenance_records (");
+            sb.append(String.join(", ", cols));
+            sb.append(") VALUES (");
+            for (int i = 0; i < cols.size(); i++) {
+                if (i > 0) sb.append(", ");
+                sb.append("?");
+            }
+            sb.append(")");
+
+            pstmt = conn.prepareStatement(sb.toString());
+            int idx = 1;
+            pstmt.setString(idx++, record.getCustomerName());
+            pstmt.setString(idx++, record.getInspectorName());
+            pstmt.setDate(idx++, record.getInspectionDate());
+            setStringOrNull(pstmt, idx++, record.getVerticaVersion());
+            setStringOrNull(pstmt, idx++, record.getNote());
+            if (hasSize) setStringOrNull(pstmt, idx++, record.getLicenseSizeGb());
+            if (hasUsageSize) setStringOrNull(pstmt, idx++, record.getLicenseUsageSize());
+            if (hasUsagePct) setStringOrNull(pstmt, idx++, record.getLicenseUsagePct());
 
             int rowsAffected = pstmt.executeUpdate();
             success = (rowsAffected > 0);
@@ -144,7 +162,7 @@ public class MaintenanceRecordDAO {
         return success;
     }
 
-    // 정기점검 이력 수정
+    // 정기점검 이력 수정 (존재하는 컬럼만 동적으로 포함)
     public boolean updateMaintenanceRecord(MaintenanceRecordDTO record) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -152,17 +170,29 @@ public class MaintenanceRecordDAO {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "UPDATE maintenance_records SET customer_name = ?, inspector_name = ?, " +
-                        "inspection_date = ?, vertica_version = ?, note = ?, updated_at = statement_timestamp() " +
-                        "WHERE maintenance_id = ?";
+            boolean hasSize = columnExists(conn, "maintenance_records", "license_size_gb");
+            boolean hasUsagePct = columnExists(conn, "maintenance_records", "license_usage_pct");
+            boolean hasUsageSize = columnExists(conn, "maintenance_records", "license_usage_size");
 
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, record.getCustomerName());
-            pstmt.setString(2, record.getInspectorName());
-            pstmt.setDate(3, record.getInspectionDate());
-            setStringOrNull(pstmt, 4, record.getVerticaVersion());
-            setStringOrNull(pstmt, 5, record.getNote());
-            pstmt.setLong(6, record.getMaintenanceId());
+            StringBuilder sb = new StringBuilder();
+            sb.append("UPDATE maintenance_records SET ");
+            sb.append("customer_name = ?, inspector_name = ?, inspection_date = ?, vertica_version = ?, note = ?");
+            if (hasSize) sb.append(", license_size_gb = ?");
+            if (hasUsageSize) sb.append(", license_usage_size = ?");
+            if (hasUsagePct) sb.append(", license_usage_pct = ?");
+            sb.append(", updated_at = statement_timestamp() WHERE maintenance_id = ?");
+
+            pstmt = conn.prepareStatement(sb.toString());
+            int idx = 1;
+            pstmt.setString(idx++, record.getCustomerName());
+            pstmt.setString(idx++, record.getInspectorName());
+            pstmt.setDate(idx++, record.getInspectionDate());
+            setStringOrNull(pstmt, idx++, record.getVerticaVersion());
+            setStringOrNull(pstmt, idx++, record.getNote());
+            if (hasSize) setStringOrNull(pstmt, idx++, record.getLicenseSizeGb());
+            if (hasUsageSize) setStringOrNull(pstmt, idx++, record.getLicenseUsageSize());
+            if (hasUsagePct) setStringOrNull(pstmt, idx++, record.getLicenseUsagePct());
+            pstmt.setLong(idx++, record.getMaintenanceId());
 
             int rowsAffected = pstmt.executeUpdate();
             success = (rowsAffected > 0);
@@ -214,16 +244,12 @@ public class MaintenanceRecordDAO {
             pstmt.setLong(1, maintenanceId);
             rs = pstmt.executeQuery();
 
+            boolean hasSize = columnExists(conn, "maintenance_records", "license_size_gb");
+            boolean hasUsagePct = columnExists(conn, "maintenance_records", "license_usage_pct");
+            boolean hasUsageSize = columnExists(conn, "maintenance_records", "license_usage_size");
+
             if (rs.next()) {
-                record = new MaintenanceRecordDTO();
-                record.setMaintenanceId(rs.getLong("maintenance_id"));
-                record.setCustomerName(rs.getString("customer_name"));
-                record.setInspectorName(rs.getString("inspector_name"));
-                record.setInspectionDate(rs.getDate("inspection_date"));
-                record.setVerticaVersion(rs.getString("vertica_version"));
-                record.setNote(rs.getString("note"));
-                record.setCreatedAt(rs.getTimestamp("created_at"));
-                record.setUpdatedAt(rs.getTimestamp("updated_at"));
+                record = mapRowToDto(rs, hasSize, hasUsagePct, hasUsageSize);
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -248,17 +274,12 @@ public class MaintenanceRecordDAO {
             pstmt.setString(1, customerName);
             rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                MaintenanceRecordDTO record = new MaintenanceRecordDTO();
-                record.setMaintenanceId(rs.getLong("maintenance_id"));
-                record.setCustomerName(rs.getString("customer_name"));
-                record.setInspectorName(rs.getString("inspector_name"));
-                record.setInspectionDate(rs.getDate("inspection_date"));
-                record.setVerticaVersion(rs.getString("vertica_version"));
-                record.setNote(rs.getString("note"));
-                record.setCreatedAt(rs.getTimestamp("created_at"));
-                record.setUpdatedAt(rs.getTimestamp("updated_at"));
+            boolean hasSize = columnExists(conn, "maintenance_records", "license_size_gb");
+            boolean hasUsagePct = columnExists(conn, "maintenance_records", "license_usage_pct");
+            boolean hasUsageSize = columnExists(conn, "maintenance_records", "license_usage_size");
 
+            while (rs.next()) {
+                MaintenanceRecordDTO record = mapRowToDto(rs, hasSize, hasUsagePct, hasUsageSize);
                 records.add(record);
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -270,7 +291,7 @@ public class MaintenanceRecordDAO {
         return records;
     }
 
-    // 고객사의 점검일/라이선스 사용률(%) 시계열 조회
+    // 고객사의 점검일/라이선스 사용률(%) 시계열 조회 (문자열 컬럼을 정수로 파싱)
     public List<Map<String, Object>> getLicenseUsageSeries(String customerName) {
         List<Map<String, Object>> points = new ArrayList<>();
         Connection conn = null;
@@ -279,10 +300,12 @@ public class MaintenanceRecordDAO {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "SELECT inspection_date, REGEXP_SUBSTR(note, '[0-9]+(?=%)', 1, 1) AS license_usage " +
-                         "FROM maintenance_records " +
-                         "WHERE customer_name = ? AND REGEXP_LIKE(note, '[0-9]+%') " +
-                         "ORDER BY inspection_date ASC";
+            boolean hasUsagePct = columnExists(conn, "maintenance_records", "license_usage_pct");
+            if (!hasUsagePct) {
+                return points; // 컬럼이 없으면 빈 결과 반환
+            }
+
+            String sql = "SELECT inspection_date, license_usage_pct AS usage_val FROM maintenance_records WHERE customer_name = ? AND license_usage_pct IS NOT NULL ORDER BY inspection_date ASC";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, customerName);
             rs = pstmt.executeQuery();
@@ -290,9 +313,9 @@ public class MaintenanceRecordDAO {
             while (rs.next()) {
                 Map<String, Object> point = new LinkedHashMap<>();
                 java.sql.Date d = rs.getDate("inspection_date");
-                String usage = rs.getString("license_usage");
+                String usageStr = rs.getString("usage_val");
                 point.put("date", d != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(d) : null);
-                point.put("value", usage != null ? Integer.parseInt(usage) : null);
+                point.put("value", tryParseInt(usageStr));
                 points.add(point);
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -311,5 +334,84 @@ public class MaintenanceRecordDAO {
         } else {
             pstmt.setString(parameterIndex, value.trim());
         }
+    }
+
+    private MaintenanceRecordDTO mapRowToDto(ResultSet rs, boolean hasSize, boolean hasUsagePct, boolean hasUsageSize) throws SQLException {
+        MaintenanceRecordDTO record = new MaintenanceRecordDTO();
+        record.setMaintenanceId(rs.getLong("maintenance_id"));
+        record.setCustomerName(rs.getString("customer_name"));
+        record.setInspectorName(rs.getString("inspector_name"));
+        record.setInspectionDate(rs.getDate("inspection_date"));
+        record.setVerticaVersion(rs.getString("vertica_version"));
+        record.setNote(rs.getString("note"));
+        record.setCreatedAt(rs.getTimestamp("created_at"));
+        record.setUpdatedAt(rs.getTimestamp("updated_at"));
+
+        if (hasSize) {
+            record.setLicenseSizeGb(rs.getString("license_size_gb"));
+        }
+        if (hasUsageSize) {
+            record.setLicenseUsageSize(rs.getString("license_usage_size"));
+        }
+        if (hasUsagePct) {
+            record.setLicenseUsagePct(rs.getString("license_usage_pct"));
+        }
+
+        return record;
+    }
+
+    private Integer tryParseInt(String s) {
+        if (s == null) return null;
+        try {
+            String trimmed = s.trim();
+            if (trimmed.isEmpty()) return null;
+            // 숫자만 남기고 파싱 시도 (예: "75%" -> 75)
+            String digits = trimmed.replaceAll("[^0-9-]", "");
+            if (digits.isEmpty()) return null;
+            return Integer.parseInt(digits);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private boolean columnExists(Connection conn, String tableName, String columnName) {
+        ResultSet rs = null;
+        try {
+            java.sql.DatabaseMetaData meta = conn.getMetaData();
+            rs = meta.getColumns(null, null, tableName, columnName);
+            if (rs.next()) return true;
+            DBConnection.close(rs);
+            rs = meta.getColumns(null, null, tableName.toUpperCase(), columnName.toUpperCase());
+            return rs.next();
+        } catch (SQLException e) {
+            return false;
+        } finally {
+            DBConnection.close(rs);
+        }
+    }
+
+    public MaintenanceRecordDTO getLatestMaintenanceRecordForCustomer(String customerName) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            conn = DBConnection.getConnection();
+            boolean hasSize = columnExists(conn, "maintenance_records", "license_size_gb");
+            boolean hasUsagePct = columnExists(conn, "maintenance_records", "license_usage_pct");
+            boolean hasUsageSize = columnExists(conn, "maintenance_records", "license_usage_size");
+
+            String sql = "SELECT * FROM maintenance_records WHERE customer_name = ? ORDER BY inspection_date DESC LIMIT 1";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, customerName);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return mapRowToDto(rs, hasSize, hasUsagePct, hasUsageSize);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            DBConnection.close(rs, pstmt, conn);
+        }
+        return null;
     }
 }

@@ -491,6 +491,17 @@
                                         </c:choose>
                                     </span>
                                 </div>
+                                <div class="detail-group">
+                                    <span class="detail-label">라이선스</span>
+                                    <span class="detail-value">
+                                        <c:choose>
+                                            <c:when test="${not empty licenseSummaries[record.maintenanceId]}">
+                                                ${licenseSummaries[record.maintenanceId]}
+                                            </c:when>
+                                            <c:otherwise>-</c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                </div>
                             </div>
                             <c:if test="${not empty record.note}">
                                 <div class="history-note"><div class="note-label"><i class="fas fa-sticky-note"> 점검 내용 및 비고</i>

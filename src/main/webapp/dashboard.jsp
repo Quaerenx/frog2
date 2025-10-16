@@ -21,6 +21,13 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/customers.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pages/dashboard_box.css">
+  <style>
+    /* 카드 헤더 아이콘-타이틀 간격 최소화 (대시보드 카드 한정) */
+    .dashboard-card .card-header { display: flex; align-items: center; gap: 4px; }
+    .dashboard-card .card-header i { margin-right: 0; }
+    /* 서브메뉴: 아이콘과 텍스트 수평/수직 정렬 */
+    .dashboard-submenu a { display: inline-flex; align-items: center; }
+  </style>
 </head>
 <body class="page-1050 page-customers">
   <%@ include file="/includes/header.jsp" %>
@@ -39,7 +46,13 @@
           <div class="card-item">
             <div class="card dashboard-card">
               <div class="card-header">
-                <i class="fas fa-th-large"></i> ${entry.key}
+                <c:set var="cat" value="${entry.key}" />
+                <c:choose>
+                  <c:when test="${cat == '고객관리'}"><i class="fas fa-address-book"></i></c:when>
+                  <c:when test="${cat == '자료관리'}"><i class="fas fa-folder-open"></i></c:when>
+                  <c:otherwise><i class="fas fa-th-large"></i></c:otherwise>
+                </c:choose>
+                ${entry.key}
               </div>
               <div class="card-body">
                 <ul class="dashboard-submenu">
@@ -50,7 +63,7 @@
                     </c:if>
                     <li>
                       <a href="${pageContext.request.contextPath}/${resolvedUrl}">
-                        <i class="${menuItem.icon} mr-2"></i>${menuItem.title}
+                        <i class="${menuItem.icon} fa-fw mr-2"></i>${menuItem.title}
                       </a>
                     </li>
                   </c:forEach>
@@ -59,16 +72,35 @@
             </div>
           </div>
         </c:forEach>
-          <!-- 추가 카드: 임의 이미지 표시 -->
+          <!-- 추가 카드: 외부 링크 바로가기 리스트 -->
           <div class="card-item">
             <div class="card dashboard-card">
               <div class="card-header">
-                <i class="fas fa-image"></i> 임시
+                <i class="fas fa-external-link-alt"></i> 바로가기
               </div>
-              <div class="card-body text-center">
-                <a href="https://x2wizard.github.io/" target="_blank" rel="noopener noreferrer">
-                  <img src="${pageContext.request.contextPath}/resources/images/images/ollama.png" alt="sample" style="max-width:100%; height:auto; border-radius:6px;" />
-                </a>
+              <div class="card-body">
+                <ul class="dashboard-submenu">
+                  <li>
+                    <a href="https://docs.vertica.com/" target="_blank" rel="noopener noreferrer">
+                      <i class="fas fa-link fa-fw mr-2"></i> Vertica 공식 홈페이지
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://x2wizard.github.io/" target="_blank" rel="noopener noreferrer">
+                      <i class="fas fa-link fa-fw mr-2"></i> Vertica 블로그
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://www.microfocus.com/lifecycle/" target="_blank" rel="noopener noreferrer">
+                      <i class="fas fa-link fa-fw mr-2"></i> Vertica EOS 정보
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://secureupload.microfocus.com/mffts/" target="_blank" rel="noopener noreferrer">
+                      <i class="fas fa-link fa-fw mr-2"></i> Vertica Caseopen 자료 업로드
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
