@@ -9,6 +9,11 @@
     <!-- 세션 설정 -->
     <session-config>
         <session-timeout>360</session-timeout> <!-- 360분 (6시간) -->
+        <cookie-config>
+            <http-only>true</http-only>
+            <!-- HTTPS 운영 시 아래 secure 활성화 권장 -->
+            <!-- <secure>true</secure> -->
+        </cookie-config>
     </session-config>
     
     <!-- 시작 페이지 설정 -->
@@ -25,6 +30,44 @@
         <error-code>500</error-code>
         <location>/error/500.jsp</location>
     </error-page>
+
+    <!-- UTF-8 인코딩 필터 (요청/응답 인코딩 일관화) -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>com.company.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 전역 보안 헤더 필터: XSS/클릭재킹 등 기본 방어 헤더 추가 -->
+    <filter>
+        <filter-name>SecurityHeadersFilter</filter-name>
+        <filter-class>com.company.filter.SecurityHeadersFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SecurityHeadersFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 인증 필터: 세션 인증이 필요한 URL 보호 -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.company.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     
     <!-- 서블릿 매핑 -->
     <servlet>
@@ -99,33 +142,34 @@
         <url-pattern>/comment</url-pattern>
     </servlet-mapping>
 
-    <!-- UTF-8 인코딩 필터 (요청/응답 인코딩 일관화) -->
-    <filter>
-        <filter-name>CharacterEncodingFilter</filter-name>
-        <filter-class>com.company.filter.CharacterEncodingFilter</filter-class>
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>UTF-8</param-value>
-        </init-param>
-        <init-param>
-            <param-name>forceEncoding</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>CharacterEncodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    <!-- Favicon 서블릿: /favicon.ico -> /favicon.png 리다이렉트 -->
+    <servlet>
+        <servlet-name>FaviconServlet</servlet-name>
+        <servlet-class>com.company.controller.FaviconServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FaviconServlet</servlet-name>
+        <url-pattern>/favicon.ico</url-pattern>
+    </servlet-mapping>
 
-    <!-- 인증 필터: 세션 인증이 필요한 URL 보호 -->
-    <filter>
-        <filter-name>AuthFilter</filter-name>
-        <filter-class>com.company.filter.AuthFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>AuthFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    <servlet>
+        <servlet-name>HostServlet</servlet-name>
+        <servlet-class>com.company.controller.HostServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HostServlet</servlet-name>
+        <url-pattern>/hosts</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MyPageServlet</servlet-name>
+        <servlet-class>com.company.controller.MyPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyPageServlet</servlet-name>
+        <url-pattern>/mypage</url-pattern>
+    </servlet-mapping>
 
     <!-- JSTL 설정 및 JspServlet 직접 선언은 제거하여 중복/오용 방지 -->
 

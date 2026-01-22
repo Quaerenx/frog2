@@ -16,7 +16,7 @@ import com.company.util.DBConnection;
 
 public class MaintenanceRecordDAO {
 
-    // licnese_usage_pct 오탈자 컬럼이 존재하고 정식 컬럼이 없으면 스키마를 정정한다.
+    // licnese_usage_pct ?�탈??컬럼??존재?�고 ?�식 컬럼???�으�??�키마�? ?�정?�다.
     private void ensureUsagePctColumnRenamed() {
         Connection conn = null;
         Statement stmt = null;
@@ -29,14 +29,14 @@ public class MaintenanceRecordDAO {
                 stmt.executeUpdate("ALTER TABLE maintenance_records RENAME COLUMN licnese_usage_pct TO license_usage_pct");
             }
         } catch (Exception ignored) {
-            // 무해하게 무시 (권한 없거나 이미 처리된 경우)
+            // 무해?�게 무시 (권한 ?�거???��? 처리??경우)
         } finally {
             DBConnection.close(stmt);
             DBConnection.close(conn);
         }
     }
 
-    // 담당자별로 정기점검 이력을 그룹화하여 조회
+    // ?�당?�별�??�기?��? ?�력??그룹?�하??조회
     public Map<String, List<MaintenanceRecordDTO>> getMaintenanceRecordsByInspector() {
         ensureUsagePctColumnRenamed();
         Map<String, List<MaintenanceRecordDTO>> inspectorRecords = new LinkedHashMap<>();
@@ -59,7 +59,7 @@ public class MaintenanceRecordDAO {
                 String inspectorName = record.getInspectorName();
                 inspectorRecords.computeIfAbsent(inspectorName, k -> new ArrayList<>()).add(record);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         } finally {
             DBConnection.close(rs, pstmt, conn);
@@ -68,7 +68,7 @@ public class MaintenanceRecordDAO {
         return inspectorRecords;
     }
 
-    // 모든 정기점검 이력 조회
+    // 모든 ?�기?��? ?�력 조회
     public List<MaintenanceRecordDTO> getAllMaintenanceRecords() {
         ensureUsagePctColumnRenamed();
         List<MaintenanceRecordDTO> records = new ArrayList<>();
@@ -90,7 +90,7 @@ public class MaintenanceRecordDAO {
                 MaintenanceRecordDTO record = mapRowToDto(rs, hasSize, hasUsagePct, hasUsageSize);
                 records.add(record);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         } finally {
             DBConnection.close(rs, pstmt, conn);
@@ -99,7 +99,7 @@ public class MaintenanceRecordDAO {
         return records;
     }
 
-    // 특정 담당자의 고객사 목록 조회 (활성 상태 고객사만)
+    // ?�정 ?�당?�의 고객??목록 조회 (?�성 ?�태 고객?�만)
     public List<String> getCustomersByInspector(String inspectorName) {
         List<String> customers = new ArrayList<>();
         Connection conn = null;
@@ -119,7 +119,7 @@ public class MaintenanceRecordDAO {
             while (rs.next()) {
                 customers.add(rs.getString("customer_name"));
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         } finally {
             DBConnection.close(rs, pstmt, conn);
@@ -128,7 +128,7 @@ public class MaintenanceRecordDAO {
         return customers;
     }
 
-    // 새로운 정기점검 이력 추가 (존재하는 컬럼만 동적으로 포함)
+    // ?�로???�기?��? ?�력 추�? (존재?�는 컬럼�??�적?�로 ?�함)
     public boolean addMaintenanceRecord(MaintenanceRecordDTO record) {
         ensureUsagePctColumnRenamed();
         Connection conn = null;
@@ -149,7 +149,7 @@ public class MaintenanceRecordDAO {
             cols.add("vertica_version");
             cols.add("note");
 
-            // 선택 컬럼
+            // ?�택 컬럼
             if (hasSize) cols.add("license_size_gb");
             if (hasUsageSize) cols.add("license_usage_size");
             if (hasUsagePct) {
@@ -180,7 +180,7 @@ public class MaintenanceRecordDAO {
             int rowsAffected = pstmt.executeUpdate();
             success = (rowsAffected > 0);
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         } finally {
             DBConnection.close(pstmt, conn);
@@ -189,7 +189,7 @@ public class MaintenanceRecordDAO {
         return success;
     }
 
-    // 정기점검 이력 수정 (존재하는 컬럼만 동적으로 포함)
+    // ?�기?��? ?�력 ?�정 (존재?�는 컬럼�??�적?�로 ?�함)
     public boolean updateMaintenanceRecord(MaintenanceRecordDTO record) {
         ensureUsagePctColumnRenamed();
         Connection conn = null;
@@ -225,7 +225,7 @@ public class MaintenanceRecordDAO {
             int rowsAffected = pstmt.executeUpdate();
             success = (rowsAffected > 0);
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         } finally {
             DBConnection.close(pstmt, conn);
@@ -234,7 +234,7 @@ public class MaintenanceRecordDAO {
         return success;
     }
 
-    // 정기점검 이력 삭제
+    // ?�기?��? ?�력 ??��
     public boolean deleteMaintenanceRecord(Long maintenanceId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -249,7 +249,7 @@ public class MaintenanceRecordDAO {
             int rowsAffected = pstmt.executeUpdate();
             success = (rowsAffected > 0);
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         } finally {
             DBConnection.close(pstmt, conn);
@@ -258,7 +258,7 @@ public class MaintenanceRecordDAO {
         return success;
     }
 
-    // ID로 특정 정기점검 이력 조회
+    // ID�??�정 ?�기?��? ?�력 조회
     public MaintenanceRecordDTO getMaintenanceRecordById(Long maintenanceId) {
         ensureUsagePctColumnRenamed();
         MaintenanceRecordDTO record = null;
@@ -280,7 +280,7 @@ public class MaintenanceRecordDAO {
             if (rs.next()) {
                 record = mapRowToDto(rs, hasSize, hasUsagePct, hasUsageSize);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         } finally {
             DBConnection.close(rs, pstmt, conn);
@@ -289,7 +289,7 @@ public class MaintenanceRecordDAO {
         return record;
     }
 
-    // 특정 고객사의 정기점검 이력 조회
+    // ?�정 고객?�의 ?�기?��? ?�력 조회
     public List<MaintenanceRecordDTO> getMaintenanceRecordsByCustomer(String customerName) {
         ensureUsagePctColumnRenamed();
         List<MaintenanceRecordDTO> records = new ArrayList<>();
@@ -312,7 +312,7 @@ public class MaintenanceRecordDAO {
                 MaintenanceRecordDTO record = mapRowToDto(rs, hasSize, hasUsagePct, hasUsageSize);
                 records.add(record);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         } finally {
             DBConnection.close(rs, pstmt, conn);
@@ -321,7 +321,7 @@ public class MaintenanceRecordDAO {
         return records;
     }
 
-    // 고객사의 점검일/라이선스 사용률(%) 시계열 조회: 날짜별로 사용률/사용량(TB)/라이선스 크기(TB)를 모두 포함해 반환
+    // 고객?�의 ?��????�이?�스 ?�용�?%) ?�계??조회: ?�짜별로 ?�용�??�용??TB)/?�이?�스 ?�기(TB)�?모두 ?�함??반환
     public List<Map<String, Object>> getLicenseUsageSeries(String customerName) {
         ensureUsagePctColumnRenamed();
         List<Map<String, Object>> points = new ArrayList<>();
@@ -335,7 +335,7 @@ public class MaintenanceRecordDAO {
             boolean hasSize = columnExists(conn, "maintenance_records", "license_size_gb");
             boolean hasUsageSize = columnExists(conn, "maintenance_records", "license_usage_size");
             if (!hasUsagePct && !hasSize && !hasUsageSize) {
-                return points; // 아무 관련 컬럼도 없으면 빈 결과
+                return points; // ?�무 관??컬럼???�으�?�?결과
             }
 
             String sql = "SELECT inspection_date, " +
@@ -358,38 +358,36 @@ public class MaintenanceRecordDAO {
                 if (d == null) continue;
 
                 String pctStr = hasUsagePct ? rs.getString("license_usage_pct") : null;
-                String sizeStr = hasSize ? rs.getString("license_size_gb") : null; // 실제 단위는 TB
-                String usageSizeStr = hasUsageSize ? rs.getString("license_usage_size") : null; // TB 단위
+                String sizeStr = hasSize ? rs.getString("license_size_gb") : null; // ?�제 ?�위??TB
+                String usageSizeStr = hasUsageSize ? rs.getString("license_usage_size") : null; // TB ?�위
 
-                // 값 파싱
+                // �??�싱
                 Integer pct = tryParseInt(pctStr);
-                Double sizeTb = parseToTbStrict(sizeStr);   // TB로 파싱
-                Double usedTb = parseToTbStrict(usageSizeStr); // TB로 파싱
+                Double sizeTb = parseToTbStrict(sizeStr);   // TB�??�싱
+                Double usedTb = parseToTbStrict(usageSizeStr); // TB�??�싱
 
-                // 사용률 미제공 시 size/usage로 계산
+                // ?�용�?미제�???size/usage�?계산
                 if (pct == null && sizeTb != null && sizeTb > 0 && usedTb != null) {
                     int rounded = (int) Math.round((usedTb / sizeTb) * 100.0);
                     pct = rounded;
                 }
-                // 사용량 미제공 시 size와 pct로 계산
+                // ?�용??미제�???size?� pct�?계산
                 if (usedTb == null && sizeTb != null && pct != null) {
                     usedTb = (sizeTb * pct) / 100.0;
                 }
-                // 라이선스 크기 미제공 시 used와 pct로 계산 (pct>0 보호)
+                // ?�이?�스 ?�기 미제�???used?� pct�?계산 (pct>0 보호)
                 if (sizeTb == null && usedTb != null && pct != null && pct > 0) {
                     sizeTb = (usedTb * 100.0) / pct;
                 }
 
                 Map<String, Object> point = new LinkedHashMap<>();
                 point.put("date", df.format(d));
-                if (pct != null) point.put("value", pct); // 기존 호환 키
-                else point.put("value", null);
-                point.put("pct", pct);       // 명시 키
-                point.put("usedTb", usedTb);  // 사용량(TB)
-                point.put("sizeTb", sizeTb);  // 라이선스 크기(TB)
+                if (pct != null) point.put("value", pct); // 기존 ?�환 ??                else point.put("value", null);
+                point.put("pct", pct);       // 명시 ??                point.put("usedTb", usedTb);  // ?�용??TB)
+                point.put("sizeTb", sizeTb);  // ?�이?�스 ?�기(TB)
                 points.add(point);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         } finally {
             DBConnection.close(rs, pstmt, conn);
@@ -398,7 +396,7 @@ public class MaintenanceRecordDAO {
         return points;
     }
 
-    // TB 단위 숫자로 안전 파싱: "3.5TB" -> 3.5, "3500 GB" -> 3.41796875, 단위 없으면 TB로 간주
+    // TB ?�위 ?�자�??�전 ?�싱: "3.5TB" -> 3.5, "3500 GB" -> 3.41796875, ?�위 ?�으�?TB�?간주
     private Double parseToTbStrict(String s) {
         if (s == null) return null;
         String raw = s.trim();
@@ -408,12 +406,11 @@ public class MaintenanceRecordDAO {
         boolean hasTb = lower.contains("tb");
         Double n = parseNumber(raw);
         if (n == null) return null;
-        if (hasGb) return n / 1024.0;  // GB -> TB 변환
-        // TB 명시 또는 단위 미표시 시 TB로 취급
+        if (hasGb) return n / 1024.0;  // GB -> TB 변??        // TB 명시 ?�는 ?�위 미표????TB�?취급
         return n;
     }
 
-    // 빈 문자열을 NULL로 처리하는 도우미 메서드
+    // 빈 문자열을 NULL로 처리하는 헬퍼 메서드
     private void setStringOrNull(PreparedStatement pstmt, int parameterIndex, String value) throws SQLException {
         if (value == null || value.trim().isEmpty()) {
             pstmt.setNull(parameterIndex, Types.VARCHAR);
@@ -468,7 +465,7 @@ public class MaintenanceRecordDAO {
         try {
             String trimmed = s.trim();
             if (trimmed.isEmpty()) return null;
-            // 숫자만 남기고 파싱 시도 (예: "75%" -> 75)
+            // ?�자�??�기�??�싱 ?�도 (?? "75%" -> 75)
             String digits = trimmed.replaceAll("[^0-9-]", "");
             if (digits.isEmpty()) return null;
             return Integer.parseInt(digits);
@@ -493,12 +490,12 @@ public class MaintenanceRecordDAO {
         }
     }
 
-    // 숫자/단위 문자열을 안전하게 숫자로 파싱
+    // ?�자/?�위 문자?�을 ?�전?�게 ?�자�??�싱
     private Double parseNumber(String s) {
         if (s == null) return null;
         String t = s.trim();
         if (t.isEmpty()) return null;
-        // 콤마 제거 후 숫자/소수/부호만 유지
+        // 콤마 ?�거 ???�자/?�수/부?�만 ?��?
         t = t.replace(",", "");
         t = t.replaceAll("[^0-9.\\-]", "");
         if (t.isEmpty() || t.equals("-") || t.equals(".")) return null;
@@ -509,7 +506,7 @@ public class MaintenanceRecordDAO {
         }
     }
 
-    // "12TB", "500 GB" 같은 값을 GB 단위 숫자로 환산
+    // "12TB", "500 GB" 같�? 값을 GB ?�위 ?�자�??�산
     private Double parseToGb(String s) {
         if (s == null) return null;
         String raw = s.trim();
@@ -520,10 +517,10 @@ public class MaintenanceRecordDAO {
         Double n = parseNumber(raw);
         if (n == null) return null;
         if (isTb || (!isGb && !isTb)) {
-            // TB 명시 또는 단위 미표시(기본 TB)인 경우 GB로 환산
+            // TB 명시 ?�는 ?�위 미표??기본 TB)??경우 GB�??�산
             return n * 1024.0;
         }
-        return n; // GB 명시 시 그대로 반환
+        return n; // GB 명시 ??그�?�?반환
     }
 
     public MaintenanceRecordDTO getLatestMaintenanceRecordForCustomer(String customerName) {
@@ -543,11 +540,43 @@ public class MaintenanceRecordDAO {
             if (rs.next()) {
                 return mapRowToDto(rs, hasSize, hasUsagePct, hasUsageSize);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         } finally {
             DBConnection.close(rs, pstmt, conn);
         }
         return null;
+    }
+
+    // 특정 담당자의 점검 기록 목록 조회 (List 형태)
+    public List<MaintenanceRecordDTO> getMaintenanceRecordsByInspector(String inspectorName) {
+        ensureUsagePctColumnRenamed();
+        List<MaintenanceRecordDTO> records = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBConnection.getConnection();
+            String sql = "SELECT * FROM maintenance_records WHERE inspector_name = ? ORDER BY inspection_date DESC";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, inspectorName);
+            rs = pstmt.executeQuery();
+
+            boolean hasSize = columnExists(conn, "maintenance_records", "license_size_gb");
+            boolean hasUsagePct = columnExists(conn, "maintenance_records", "license_usage_pct");
+            boolean hasUsageSize = columnExists(conn, "maintenance_records", "license_usage_size");
+
+            while (rs.next()) {
+                MaintenanceRecordDTO record = mapRowToDto(rs, hasSize, hasUsagePct, hasUsageSize);
+                records.add(record);
+            }
+        } catch (SQLException  e) {
+            e.printStackTrace();
+        } finally {
+            DBConnection.close(rs, pstmt, conn);
+        }
+
+        return records;
     }
 }

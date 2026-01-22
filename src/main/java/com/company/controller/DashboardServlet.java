@@ -54,6 +54,7 @@ public class DashboardServlet extends HttpServlet {
 		archiveMenus.add(new MenuItem(" 회의록", "meeting?view=list", "fas fa-users"));
         archiveMenus.add(new MenuItem(" 자료실", "filerepo/filerepo_downlist.jsp", "fas fa-file-alt"));
 		archiveMenus.add(new MenuItem(" 트러블슈팅", "troubleshooting?view=list", "fas fa-tools"));
+		archiveMenus.add(new MenuItem(" 호스트 관리", "hosts", "fas fa-network-wired"));
 		dashboardMenus.put("자료관리", archiveMenus);
 
 

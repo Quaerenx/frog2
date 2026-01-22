@@ -41,8 +41,12 @@ public class LoginServlet extends HttpServlet { // @WebServlet("/login") - web.x
         try {
             UserDTO user = userDAO.authenticateUser(userId, password);
 	        if (user != null) {
-	            // 인증 성공: 세션 생성 및 사용자 정보 저장
-	            HttpSession session = request.getSession();
+	            // 인증 성공: 기존 세션 무효화 후 신규 세션 발급 (세션 고정 방지)
+                HttpSession old = request.getSession(false);
+                if (old != null) {
+                    try { old.invalidate(); } catch (IllegalStateException ignore) {}
+                }
+	            HttpSession session = request.getSession(true);
 	            session.setAttribute("user", user);
 	            session.setMaxInactiveInterval(360 * 60); // 세션 유효 시간 설정 (6시간)
 

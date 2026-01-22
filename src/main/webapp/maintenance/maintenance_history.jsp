@@ -23,9 +23,11 @@
         padding: 2rem;
         border-radius: 12px;
         margin-bottom: 1.5rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e8ecef;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* 원복 */
+        border: 1px solid #e8ecef; /* 원복 */
     }
+    /* 유지보수 페이지: detail-item 아래 얇은 선 제거(하단 보더만 숨김) - 특이성 강화 및 폭 명시 */
+    body.page-maintenance .page-header { border-bottom: 0 !important; border-width: 1px 1px 0 1px !important; }
     
     .header-content {
         display: flex;
@@ -67,6 +69,11 @@
         align-items: center;
         gap: 0.5rem;
     }
+    
+    /* detail-item 아래의 불필요한 선을 제거합니다. */
+	.detail-item {
+    	border-bottom: none !important;
+	}
     
     .detail-item i {
         color: #6c757d;
@@ -425,7 +432,7 @@
         <jsp:attribute name="title"><i class="fas fa-building"></i> ${customerName}</jsp:attribute>
         <jsp:attribute name="subtitle">
             <c:if test="${not empty customer}">
-                <span class="detail-item"><i class="fas fa-calendar"></i> 도입년도: ${customer.firstIntroductionYear}</span>
+                <!-- <span class="detail-item"><i class="fas fa-calendar"></i> 도입년도: ${customer.firstIntroductionYear}</span>  -->
                 <span class="detail-item"><i class="fas fa-database"></i> DB: ${customer.dbName}</span>
                 <span class="detail-item"><i class="fas fa-code-branch"></i> 버전: ${customer.verticaVersion}</span>
                 <span class="detail-item"><i class="fas fa-user"></i> 담당자: ${customer.managerName}</span>
@@ -616,7 +623,7 @@
                     spanGaps: true,
                     pointRadius: 3,
                     pointHoverRadius: 5,
-                    fill: true
+                    fill: false
                 },
                 {
                     label: '라이선스 사용량(TB)',

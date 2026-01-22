@@ -1,1 +1,24 @@
 /target/
+/build/
+/bin/
+
+# 데이터베이스 설정 파일 (비밀번호 포함)
+**/db.properties
+src/main/resources/db.properties
+
+# 로그 파일
+logs/
+*.log
+
+# IDE 설정
+.settings/
+.classpath
+.project
+.metadata/
+.vscode/
+.idea/
+*.iml
+
+# OS 파일
+.DS_Store
+Thumbs.db

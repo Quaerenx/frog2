@@ -12,6 +12,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${pageTitle}</title>
+  <!-- Favicon -->
+  <link rel="icon" href="${pageContext.request.contextPath}/favicon.png?v=20251017" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="${pageContext.request.contextPath}/favicon.png?v=20251017">
   <!-- 기본 스타일 로드 (헤더/푸터 없이 카드만 사용) -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main_style.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/components.css">
@@ -27,6 +30,8 @@
     .dashboard-card .card-header i { margin-right: 0; }
     /* 서브메뉴: 아이콘과 텍스트 수평/수직 정렬 */
     .dashboard-submenu a { display: inline-flex; align-items: center; }
+    /* 대시보드의 pageHeader 서브타이틀은 flex를 사용하지 않고 줄바꿈 허용 */
+    .customer-management .page-header .ph-subtitle { display: block !important; }
   </style>
 </head>
 <body class="page-1050 page-customers">
